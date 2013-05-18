@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+  <meta charset="utf8">
+  <title>Degree Classification Calculator</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/calculator.js"></script>
+</head>
+<body>
+  <div id="wrap">
+    <div class="container" ng-controller="CalculatorCtrl">
+      <div class="page-header">
+        <h1>Classification Calculator <small>for University of Sheffield degrees</small></h1>
+      </div>
+      <p class="lead">Calculate your final University of Sheffield degree classification by entering your module results.</p>
+      <p>This tool can only be used for standard 3-year undergraduate degrees, and 4-year integrated Master's degrees (e.g. MEng, MComp) that don't include a year in industry or year abroad.</p>
+      
+      <hr />
+
+      <section>
+        <h2>1. How long is your degree?</h2>
+        <label for="numYears3" class="radio">
+          <input type="radio" name="numYears" value="3" id="numYears3" checked />3 years
+        </label>
+        <label for="numYears4" class="radio">
+          <input type="radio" name="numYears" value="4" id="numYears4" />4 years (integrated Master's)
+        </label>
+      </section>
+
+      <hr />
+
+      <section>
+        <h2>2. Enter module results</h2>
+
+        <ul class="unstyled">
+          <li ng-repeat="year in years">
+            <fieldset>
+              <legend>Year {{year.year}}</legend>
+
+              <div class="module well well-small" ng-repeat="module in year.modules">
+                <div class="row">
+                  <span class="span6"><input type="text" ng-model="module.name" class="input-block-level" placeholder="Module name/code (optional)" /></span>
+                  <span class="span1">
+                    <div class="input-append input-block-level">
+                      <input type="text" ng-model="module.credits" class="input-block-level" placeholder="Credits" />
+                      <span class="add-on">credits</span>
+                    </div>
+                  </span>
+                  <span>
+                    <a href="#" class="btn btn-danger btn-mini pull-right"><i class="icon-trash icon-white"></i> Remove module</a>
+                  </span>
+                </div>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th class="span6">Assigment/Exam Name</th>
+                      <th class="span2">Weighting</th>
+                      <th class="span2">Your Mark</th>
+                      <th class="span2"></th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+
+              <!-- <table class="table table-striped" style="table-layout: fixed">
+                <thead>
+                  <tr>
+                    <th class="span6">Module Name</th>
+                    <th class="span2">Weighting</th>
+                    <th class="span2">Your Mark</th>
+                    <th class="span2"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="module in year.modules">
+                    <td class="span6"><input type="text" ng-model="module.name" class="input-block-level" /></td>
+                    <td class="span2">
+                      <div class="input-append input-block-level">
+                        <input type="text" class="input-block-level" ng-model="module.weight" />
+                        <span class="add-on">%</span>
+                      </div>
+                    </td>
+                    <td class="span2">
+                      <div class="input-append input-block-level">
+                        <input type="text" class="input-block-level" ng-model="module.mark" />
+                        <span class="add-on">%</span>
+                      </div>
+                    </td>
+                    <td class="span2"><a class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i> Remove Module</a></td>
+                  </tr>
+                </tbody>
+              </table> -->
+            </fieldset>
+          </li>
+        </ul>
+      </section>
+    </div>
+    <div id="push"></div>
+  </div>
+
+  <div id="footer">
+    <div class="container">
+      <p class="muted credit">&copy; <a href="http://www.alexsilcock.net">Alex Silcock</a> 2013</p>
+    </div>
+  </div>
+  <script src="js/angular.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
