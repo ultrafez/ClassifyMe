@@ -63,29 +63,29 @@
                   </thead>
                   <tfoot>
                     <tr>
-                      <td colspan="4"><button class="btn btn-small"><i class="icon-plus"></i> Add assessment</button></td>
+                      <td colspan="4"><button class="btn btn-small" ng-click="addAssessment(module)"><i class="icon-plus"></i> Add assessment</button></td>
                     </tr>
                   </tfoot>
                   <tbody>
-                    <tr ng-repeat="component in module.components">
+                    <tr ng-repeat="assessment in module.assessments">
                       <td class="span6">
-                        <input type="text" ng-model="component.name" class="input-block-level" placeholder="e.g. Exam" />
+                        <input type="text" ng-model="assessment.name" class="input-block-level" placeholder="e.g. Exam" />
                       </td>
                       <td class="span2">
                         <div class="input-append input-block-level">
-                          <input type="number" min="0" max="100" class="input-block-level" ng-model="component.weight" />
+                          <input type="number" min="0" max="100" class="input-block-level" ng-model="assessment.weight" />
                           <span class="add-on">%</span>
                         </div>
                       </td>
                       <td class="span2">
                         <div class="input-append input-block-level">
-                          <input type="number" min="0" max="100" class="input-block-level" ng-model="component.mark" />
+                          <input type="number" min="0" max="100" class="input-block-level" ng-model="assessment.mark" />
                           <span class="add-on">%</span>
                         </div>
                       </td>
                       <td class="span2">
-                        <button class="btn btn-small" title="Duplicate this assessment"><i class="icon-copy"></i></button>
-                        <button class="btn btn-danger btn-small" title="Delete this assessment"><i class="icon-trash icon-white"></i></button>
+                        <button class="btn btn-small" title="Duplicate this assessment" ng-click="duplicateAssessment(module, $index)"><i class="icon-copy"></i></button>
+                        <button class="btn btn-danger btn-small" title="Delete this assessment" ng-click="deleteAssessment(module, $index)"><i class="icon-trash icon-white"></i></button>
                       </td>
                     </tr>
                   </tbody>
