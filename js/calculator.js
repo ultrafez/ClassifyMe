@@ -11,4 +11,12 @@ function CalculatorCtrl($scope) {
       {"name": "Test Module 3", "credits": 120, "components": []},
     ]}
   ];
+
+  $scope.addModule = function(yearIndex) {
+    $scope.years[yearIndex].modules.push({"name": "", "credits": "", "components": []});
+  }
+
+  $scope.deleteModule = function(year, moduleIndex) {
+    year.modules.splice(moduleIndex, 1);
+  }
 }
