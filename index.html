@@ -40,19 +40,26 @@
               <legend>Year {{year.year}} <small>Overall TODO%</small></legend>
 
               <div class="module well well-small" ng-repeat="module in year.modules">
-                <div class="row">
-                  <span class="span6"><input type="text" ng-model="module.name" class="input-block-level" placeholder="Module name/code (optional)" /></span>
-                  <span class="span1">
-                    <div class="input-append input-block-level">
-                      <input type="number" min="0" max="120" required ng-model="module.credits" class="input-block-level" />
-                      <span class="add-on">credits</span>
-                    </div>
+                <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
+                  <input type="text" ng-model="module.name" class="input-xlarge" placeholder="Module name/code (optional)" />
+                  <div class="input-append">
+                    <input type="number" min="0" max="120" required ng-model="module.credits" class="input-mini" />
+                    <span class="add-on">credits</span>
+                  </div>
+                  <span class="input-append input-mini" ng-show="module.isSingleRow">
+                    <input type="number" class="input-mini" min="0" max="100" required ng-model="module.assessments[0].mark">
+                    <span class="add-on">% mark</span>
                   </span>
-                  <span>
-                    <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-small pull-right"><i class="icon-trash icon-white"></i> Remove module</button>
+                  <span class="input-append input-mini" ng-hide="module.isSingleRow">
+                    <input type="text" class="input-mini" disabled value="{{moduleMark(module)}}" />
+                    <span class="add-on">% mark</span>
+                  </span>
+                  <span class="pull-right">
+                    <button ng-click="convertToMultiple(module)" class="btn btn-info btn-small" ng-show="module.isSingleRow">Add Assessments...</button>
+                    <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-small"><i class="icon-trash icon-white"></i> Remove module</button>
                   </span>
                 </div>
-                <table class="table table-striped assessments">
+                <table class="table table-striped assessments" ng-hide="module.isSingleRow">
                   <thead>
                     <tr>
                       <th class="span6">Assessment Name</th>
@@ -63,7 +70,10 @@
                   </thead>
                   <tfoot>
                     <tr>
-                      <td colspan="4"><button class="btn btn-small" ng-click="addAssessment(module)"><i class="icon-plus"></i> Add assessment</button></td>
+                      <td colspan="4">
+                        <button class="btn btn-small" ng-click="addAssessment(module)"><i class="icon-plus"></i> Add assessment</button>
+                        <span class="text-error" ng-show="totalWeight(module)!=100">Assessment weights don't add up to 100%</span>
+                      </td>
                     </tr>
                   </tfoot>
                   <tbody>

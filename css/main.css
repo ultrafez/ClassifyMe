@@ -23,6 +23,12 @@ input:invalid + .add-on {
   color: #e9322d;
 }
 
+.single-row input, .single-row .input-append {
+  margin-bottom: 0;
+}
+
+/* General styles */
+
 .assessments {
   margin-bottom: 0;
 }
