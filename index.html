@@ -37,11 +37,11 @@
         <ul class="unstyled">
           <li ng-repeat="year in years">
             <fieldset class="year">
-              <legend>Year {{year.year}} <small>Overall TODO%</small></legend>
+              <legend>Year {{year.year}} <span class="pull-right">Overall {{ yearMark(year) | number:1 }}%</span></legend>
 
               <div class="module well well-small" ng-repeat="module in year.modules">
                 <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
-                  <input type="text" ng-model="module.name" class="input-xlarge" placeholder="Module name/code (optional)" />
+                  <input type="text" class="module-name" ng-model="module.name" class="input-xlarge" placeholder="Module name/code (optional)" />
                   <div class="input-append">
                     <input type="number" min="0" max="120" required ng-model="module.credits" class="input-mini" />
                     <span class="add-on">credits</span>

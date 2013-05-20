@@ -28,7 +28,10 @@ function CalculatorCtrl($scope) {
     }
   });
 
+
   /* YEARS */
+
+
   $scope.totalCredits = function(year) {
     total = 0;
     angular.forEach(year.modules, function(value, key) {
@@ -44,8 +47,21 @@ function CalculatorCtrl($scope) {
     return 120 - $scope.totalCredits(year);
   }
 
+  // Calculate the overall mark for the year (excluding modules with invalid credits or marks)
+  $scope.yearMark = function(year) {
+    yearMark = 0;
+    angular.forEach(year.modules, function(module, key) {
+      if (module.credits !== undefined) {
+        yearMark += $scope.moduleMark(module) * (module.credits / 120);
+      }
+    });
+    return yearMark;
+  }
+
 
   /* MODULES */
+
+
   $scope.addModule = function(yearIndex) {
     $scope.years[yearIndex].modules.push({"name": "", "credits": 10, "isSingleRow": true, "assessments": [{"name": "Whole Module", "weight": 100, "mark": 70}] });
   }
@@ -81,7 +97,10 @@ function CalculatorCtrl($scope) {
     module.isSingleRow = false;
   }
 
+
   /* ASSESSMENTS */
+
+
   $scope.addAssessment = function(module) {
     module.assessments.push({"name": "", "weight": "", "mark": ""});
   }

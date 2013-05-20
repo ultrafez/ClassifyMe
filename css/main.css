@@ -27,18 +27,26 @@ input:invalid + .add-on {
   margin-bottom: 0;
 }
 
+.assessments input[type=text], .assessments .input-append {
+  margin-bottom: 0;
+}
+
 /* General styles */
 
 .assessments {
   margin-bottom: 0;
 }
 
-.assessments input[type=text], .assessments .input-append {
-  margin-bottom: 0;
-}
-
 .year {
   margin-bottom: 30px;
+}
+
+.module {
+  margin-bottom: 10px;
+}
+
+.module-name {
+  font-weight: bold;
 }
 
 #push, #footer {
