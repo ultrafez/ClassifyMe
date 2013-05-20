@@ -49,7 +49,7 @@
         <ul class="unstyled">
           <li ng-repeat="year in years">
             <fieldset class="year">
-              <legend>Year {{year.year}} <span class="pull-right">Overall {{ yearMark(year) | number:1 }}%</span></legend>
+              <legend>Year {{year.year}} <span class="pull-right" ng-show="totalCredits(year) == 120">Overall {{ yearMark(year) | number:1 }}%</span></legend>
 
               <div class="module well well-small" ng-repeat="module in year.modules">
                 <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
@@ -118,7 +118,10 @@
                 <button class="btn btn-primary" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
                 <span class="text-error">You need to add modules worth an extra {{creditsNeeded(year)}} credits to this year to reach the full 120 credits.</span>
               </div>
-              <button ng-show="creditsNeeded(year) <= 0" class="btn" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
+              <div>
+                <button ng-show="creditsNeeded(year) <= 0" class="btn" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
+                <span class="text-error" ng-show="creditsOver(year) > 0">Your modules total {{totalCredits(year)}} credits for this year; remove {{creditsOver(year)}} credits worth of modules to get to a total of 120 credits.</span>
+              </div>
             </fieldset>
           </li>
         </ul>

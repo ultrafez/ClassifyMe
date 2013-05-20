@@ -92,6 +92,11 @@ function CalculatorCtrl($scope, localStorageService) {
     return 120 - $scope.totalCredits(year);
   }
 
+  // If the user has entered modules worth more than 120 credits total, how many credits over are they?
+  $scope.creditsOver = function(year) {
+    return Math.max(0, $scope.totalCredits(year) - 120);
+  }
+
   // Calculate the overall mark for the year (excluding modules with invalid credits or marks)
   $scope.yearMark = function(year) {
     yearMark = 0;
