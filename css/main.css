@@ -31,6 +31,14 @@ input:invalid + .add-on {
   margin-bottom: 0;
 }
 
+/* Disable spinner in numeric fields */
+/* http://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-inputs-spin-box  */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
 /* General styles */
 
 .assessments {
