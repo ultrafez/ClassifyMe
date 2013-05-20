@@ -1,16 +1,32 @@
 function CalculatorCtrl($scope) {
   $scope.years = [
     {"year": 2, "modules": [
-      {"name": "Test Module", "credits": 10, "assessments": [
-        {"name": "Assignment", "weight": 50, "mark": 80},
-        {"name": "Exam", "weight": 50, "mark": 74}
-      ]},
-      {"name": "Test Module 2", "credits": 10, "assessments": []},
+      // {"name": "Test Module", "credits": 10, "assessments": [
+      //   {"name": "Assignment", "weight": 50, "mark": 80},
+      //   {"name": "Exam", "weight": 50, "mark": 74}
+      // ]},
+      // {"name": "Test Module 2", "credits": 10, "assessments": []},
     ]},
     {"year": 3, "modules": [
-      {"name": "Test Module 3", "credits": 120, "assessments": []},
+      // {"name": "Test Module 3", "credits": 120, "assessments": []},
     ]}
   ];
+
+  $scope.degreeLength = 3;
+
+  $scope.$watch('degreeLength', function(newValue, oldValue) {
+    if (newValue === oldValue) return;
+
+    if (newValue == 4 && oldValue == 3) {
+      $scope.years.push({"year": 4, "modules": []});
+      return;
+    }
+
+    if (newValue == 3 && oldValue == 4) {
+      $scope.years.splice(2, 1);
+      return;
+    }
+  });
 
   $scope.addModule = function(yearIndex) {
     $scope.years[yearIndex].modules.push({"name": "", "credits": "", "assessments": []});
