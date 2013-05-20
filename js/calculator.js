@@ -1,5 +1,6 @@
-function CalculatorCtrl($scope) {
-  $scope.years = [
+function CalculatorCtrl($scope, localStorageService) {
+  // Define the default years/modules data for new users
+  var defaultYearData = [
     {"year": 2, "modules": [
       // {"name": "Test Module", "isSingleRow": false, "credits": 10, "assessments": [
       //   {"name": "Assignment", "weight": 50, "mark": 80},
@@ -12,7 +13,40 @@ function CalculatorCtrl($scope) {
     ]}
   ];
 
+  // Set default data for new users
+  $scope.years = defaultYearData;
   $scope.degreeLength = 3;
+
+  // Load saved data from local storage into Angular model
+  $scope.loadLocalStorage = function() {
+    if (!localStorageService.isSupported()) return;
+
+    if (localStorageService.get('degreeLength') == null) return;
+
+    $scope.degreeLength = parseInt(localStorageService.get('degreeLength'));
+    $scope.years = jQuery.parseJSON(localStorageService.get('years'));
+  }
+
+  // Save current data into local storage
+  $scope.saveLocalStorage = function() {
+    if (!localStorageService.isSupported()) return;
+
+    localStorageService.add('degreeLength', $scope.degreeLength);
+    localStorageService.add('years', JSON.stringify($scope.years));
+  }
+
+  // Reset the whole form
+  $scope.resetData = function() {
+    if (confirm("Are you sure you want to reset all of your entered information?")) {
+      $scope.degreeLength = 3;
+      $scope.years = defaultYearData;
+    }
+  }
+
+  // Is saving/loading of user data possible?
+  $scope.savingAvailable = function() {
+    return localStorageService.isSupported();
+  }
 
   $scope.$watch('degreeLength', function(newValue, oldValue) {
     if (newValue === oldValue) return;
@@ -27,6 +61,17 @@ function CalculatorCtrl($scope) {
       return;
     }
   });
+
+  // When the user changes any of their module data, save it to local storage.
+  $scope.$watch('years', function(newValue, oldValue) {
+    if (newValue === oldValue) return;
+
+    // Save the data to local storage for user convenience
+    $scope.saveLocalStorage();
+  }, true);
+
+  // Load saved data on page load
+  $scope.loadLocalStorage();
 
 
   /* YEARS */
