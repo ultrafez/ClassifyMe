@@ -9,8 +9,18 @@ html, body {
   margin: 0 auto -60px;
 }
 
+/* Input styles */
+
 td.span2 .input-block-level input {
   width: 109px;
+}
+
+input:invalid, textarea:invalid, select:invalid {
+  border-color: #e9322d;
+}
+
+input:invalid + .add-on {
+  color: #e9322d;
 }
 
 .assessments {

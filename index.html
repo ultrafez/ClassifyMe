@@ -44,7 +44,7 @@
                   <span class="span6"><input type="text" ng-model="module.name" class="input-block-level" placeholder="Module name/code (optional)" /></span>
                   <span class="span1">
                     <div class="input-append input-block-level">
-                      <input type="number" min="0" max="120" ng-model="module.credits" class="input-block-level" />
+                      <input type="number" min="0" max="120" required ng-model="module.credits" class="input-block-level" />
                       <span class="add-on">credits</span>
                     </div>
                   </span>
@@ -92,7 +92,11 @@
                 </table>
               </div>
 
-              <button class="btn" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
+              <div ng-show="creditsNeeded(year) > 0">
+                <button class="btn btn-primary" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
+                <span class="text-error">You need to add modules worth an extra {{creditsNeeded(year)}} credits to this year to reach the full 120 credits.</span>
+              </div>
+              <button ng-show="creditsNeeded(year) <= 0" class="btn" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
             </fieldset>
           </li>
         </ul>

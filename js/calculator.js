@@ -29,7 +29,7 @@ function CalculatorCtrl($scope) {
   });
 
   $scope.addModule = function(yearIndex) {
-    $scope.years[yearIndex].modules.push({"name": "", "credits": "", "assessments": []});
+    $scope.years[yearIndex].modules.push({"name": "", "credits": 10, "assessments": []});
   }
 
   $scope.deleteModule = function(year, moduleIndex) {
@@ -47,5 +47,20 @@ function CalculatorCtrl($scope) {
 
   $scope.deleteAssessment = function(module, assessmentIndex) {
     module.assessments.splice(assessmentIndex, 1);
+  }
+
+  $scope.totalCredits = function(year) {
+    total = 0;
+    angular.forEach(year.modules, function(value, key) {
+      if (value.credits !== undefined) {
+        total += value.credits;
+      }
+    });
+    return total;
+  }
+
+  // How many credits are needed to complete the year?
+  $scope.creditsNeeded = function(year) {
+    return 120 - $scope.totalCredits(year);
   }
 }
