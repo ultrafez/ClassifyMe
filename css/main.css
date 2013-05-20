@@ -15,6 +15,10 @@ td.span2 .input-block-level input {
   width: 109px;
 }
 
+.input-supermini {
+  width: 30px;
+}
+
 input:invalid, textarea:invalid, select:invalid {
   border-color: #e9322d;
 }
@@ -55,6 +59,7 @@ input::-webkit-inner-spin-button {
 
 .module-name {
   font-weight: bold;
+  width: 380px;
 }
 
 #push, #footer {

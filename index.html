@@ -53,17 +53,17 @@
 
               <div class="module well well-small" ng-repeat="module in year.modules">
                 <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
-                  <input type="text" class="module-name" ng-model="module.name" class="input-xlarge" placeholder="Module name/code (optional)" />
+                  <input type="text" class="module-name" ng-model="module.name" placeholder="Module name/code (optional)" />
                   <div class="input-append">
-                    <input type="number" min="0" max="120" required ng-model="module.credits" class="input-mini" />
+                    <input type="number" min="0" max="120" required ng-model="module.credits" class="input-supermini" />
                     <span class="add-on">credits</span>
                   </div>
-                  <span class="input-append input-mini" ng-show="module.isSingleRow">
-                    <input type="number" class="input-mini" min="0" max="100" required ng-model="module.assessments[0].mark">
+                  <span class="input-append" ng-show="module.isSingleRow">
+                    <input type="number" class="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark">
                     <span class="add-on">% mark</span>
                   </span>
-                  <span class="input-append input-mini" ng-hide="module.isSingleRow">
-                    <input type="text" class="input-mini" disabled value="{{moduleMark(module)}}" />
+                  <span class="input-append" ng-hide="module.isSingleRow">
+                    <input type="text" class="input-supermini" disabled value="{{moduleMark(module)}}" />
                     <span class="add-on">% mark</span>
                   </span>
                   <span class="pull-right">
