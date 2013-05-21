@@ -75,7 +75,7 @@ input::-webkit-inner-spin-button {
   -webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;
   border: solid 1px #ddd;
   margin-top: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .classification strong {
@@ -90,6 +90,10 @@ input::-webkit-inner-spin-button {
 
 .classification p:last-child {
   margin-bottom: 0;
+}
+
+.disclaimer {
+  margin-top: 50px;
 }
 
 #push, #footer {

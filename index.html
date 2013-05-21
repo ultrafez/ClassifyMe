@@ -35,7 +35,7 @@
       <p>By entering your module results (or expected module results) below, you can find out what degree classification you should receive at Graduation. You can either enter the mark you got for whole modules, or you can enter the individual assessments that make up a module, if you don't have the full module result yet.</p>
       <p>This tool can only be used for standard 3-year undergraduate degrees, and 4-year integrated Master's degrees (e.g. MComp, MEng, MChem) that don't include a year in industry or year abroad. <a data-placement="bottom" data-trigger="hover" data-content="Courses that have a year in industry or a year abroad can differ between departments in how their classifications are calculated, making it difficult to make an accurate calculate that works for all departments." class="js-activate-popover">Why?</a></p>
       <p ng-show="savingAvailable()">
-        Everything you enter will automatically be saved, so next time you visit this page your modules will still be here.
+        Everything you enter will be <strong>automatically saved</strong>, so next time you visit this page everything you've entered will still be here.
       </p>
       <p ng-show="!savingAvailable()">
         Your modules <strong>won't</strong> be saved if you browse away from this page, but if you visit this page in a more modern browser such as <a href="http://google.com/chrome">Google Chrome</a> or <a href="http://www.getfirefox.com">Mozilla Firefox</a>, then your changes will be saved automatically.
@@ -65,6 +65,10 @@
           <li ng-repeat="year in years">
             <fieldset class="year">
               <legend>Year {{year.year}} <span class="pull-right" ng-show="totalCredits(year) == 120">Overall {{ yearMark(year) | number:1 }}%</span></legend>
+
+              <div class="alert alert-info" ng-show="$index==years.length-1">
+                <strong>Don't know all of your module results?</strong> You can click "Add Assessments" for a module to enter your individual assignment/exam marks that you already know, and estimate how well you think you'll do at the rest.
+              </div>
 
               <div class="module well well-small" ng-repeat="module in year.modules">
                 <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
@@ -161,6 +165,7 @@
               <p>This final classification is calculated from the combination of your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }}.</p>
             </div>
           </div>
+          <p>Everything you've entered on this page is <strong>automatically saved</strong>, so you can come back to this page later and you won't have to re-enter everything.</p>
         </div>
         <div ng-show="classification==null">
           <p>Please fully complete the form above to calculate your final classification.</p>
@@ -169,8 +174,8 @@
 
       <hr />
 
-      <section>
-        <p>
+      <section class="disclaimer">
+        <p class="muted">
           This calculator was written based on the <a href="http://www.shef.ac.uk/polopoly_fs/1.109994!/file/LeTS-guidance-new-methodology.pdf">"Degree Classification" guidelines</a>, which are published by the University. While this tool has been tested, no responsibility is taken for any inaccuracies in calculating the final classification.
         </p>
       </section>
