@@ -164,4 +164,197 @@ function CalculatorCtrl($scope, localStorageService) {
     module.assessments.splice(assessmentIndex, 1);
   }
 
+
+  /* CLASSIFICATION */
+
+
+  // Calculate the student's degree classification based on the information they have entered.
+  // TODO: check that each year adds up to 120 credits
+  $scope.calculateClassification = function() {
+    /* DEFINE GRADE BANDS */
+    // First grade band is used for the weighted average band
+    var GRADE_BANDS_1 = [
+      {name: "First",                 lower: 69.5,  upper: 101,   isBorderline: false}, // not 100, because the check performed is "x < upper", and x=100 would fail that check
+      {name: "First/2.1 borderline",  lower: 68,    upper: 69.5,  isBorderline: true},
+      {name: "2.1",                   lower: 59.5,  upper: 68,    isBorderline: false},
+      {name: "2.1/2.2 borderline",    lower: 58,    upper: 59.5,  isBorderline: true},
+      {name: "2.2",                   lower: 49.5,  upper: 58,    isBorderline: false},
+      {name: "2.2/Third borderline",  lower: 48,    upper: 49.5,  isBorderline: true},
+      {name: "Third",                 lower: 44.5,  upper: 48,    isBorderline: false},
+      {name: "Third/Pass borderline", lower: 43.5,  upper: 44.5,  isBorderline: true},
+      {name: "Pass",                  lower: 39.5,  upper: 43.5,  isBorderline: false},
+      {name: "Pass/Fail borderline",  lower: 38,    upper: 39.5,  isBorderline: true},
+      {name: "Fail",                  lower: 0,     upper: 38,    isBorderline: false}
+    ];
+
+    // Second grade band is used for the grade distribution band
+    var GRADE_BANDS_2 = [
+      {name: "First", lower: 69.5,  upper: 101,  fullBandEquivalentIndex: 0}, // not 100, because the check performed is "x < upper", and x=100 would fail that check
+      {name: "2.1",   lower: 59.5,  upper: 69.5, fullBandEquivalentIndex: 2}, // fullBandEquivalentIndex is the index of GRADE_BANDS_1 that contains the equivalent band. Used in calculation 2.
+      {name: "2.2",   lower: 49.5,  upper: 59.5, fullBandEquivalentIndex: 4},
+      {name: "Third", lower: 44.5,  upper: 49.5, fullBandEquivalentIndex: 6},
+      {name: "Pass",  lower: 39.5,  upper: 44.5, fullBandEquivalentIndex: 8},
+      {name: "Fail",  lower: 0,     upper: 39.5, fullBandEquivalentIndex: 10}
+    ];
+
+    // Table of conversions between the first and second calculation grade bands, and the outcome band. Taken from the guidance PDF.
+    var CLASSIFICATION_COMBINATIONS = [
+      {calc1: 0,  calc2: 0,   outcomeBand: 0},
+      {calc1: 0,  calc2: 1,   outcomeBand: 0},
+      {calc1: 0,  calc2: 2,   outcomeBand: 1},
+      {calc1: 1,  calc2: 0,   outcomeBand: 0},
+      {calc1: 1,  calc2: 1,   outcomeBand: 1},
+      {calc1: 1,  calc2: 2,   outcomeBand: 2},
+      {calc1: 2,  calc2: 0,   outcomeBand: 1},
+      {calc1: 2,  calc2: 1,   outcomeBand: 2},
+      {calc1: 2,  calc2: 2,   outcomeBand: 2},
+      {calc1: 2,  calc2: 3,   outcomeBand: 2},
+      {calc1: 2,  calc2: 4,   outcomeBand: 3},
+      {calc1: 3,  calc2: 2,   outcomeBand: 2},
+      {calc1: 3,  calc2: 3,   outcomeBand: 3},
+      {calc1: 3,  calc2: 4,   outcomeBand: 4},
+      {calc1: 4,  calc2: 2,   outcomeBand: 3},
+      {calc1: 4,  calc2: 3,   outcomeBand: 4},
+      {calc1: 4,  calc2: 4,   outcomeBand: 4},
+      {calc1: 4,  calc2: 5,   outcomeBand: 4},
+      {calc1: 4,  calc2: 6,   outcomeBand: 5},
+      {calc1: 5,  calc2: 4,   outcomeBand: 4},
+      {calc1: 5,  calc2: 5,   outcomeBand: 5},
+      {calc1: 5,  calc2: 6,   outcomeBand: 6},
+      {calc1: 6,  calc2: 4,   outcomeBand: 5},
+      {calc1: 6,  calc2: 5,   outcomeBand: 6},
+      {calc1: 6,  calc2: 6,   outcomeBand: 6},
+      {calc1: 6,  calc2: 7,   outcomeBand: 6},
+      {calc1: 6,  calc2: 8,   outcomeBand: 7},
+      {calc1: 7,  calc2: 6,   outcomeBand: 6},
+      {calc1: 7,  calc2: 7,   outcomeBand: 7},
+      {calc1: 7,  calc2: 8,   outcomeBand: 8},
+      {calc1: 8,  calc2: 6,   outcomeBand: 7},
+      {calc1: 8,  calc2: 7,   outcomeBand: 8},
+      {calc1: 8,  calc2: 8,   outcomeBand: 8},
+      {calc1: 8,  calc2: 9,   outcomeBand: 8},
+      {calc1: 8,  calc2: 10,  outcomeBand: 9},
+      {calc1: 9,  calc2: 8,   outcomeBand: 8},
+      {calc1: 9,  calc2: 9,   outcomeBand: 9},
+      {calc1: 9,  calc2: 10,  outcomeBand: 10},
+      {calc1: 10, calc2: 8,   outcomeBand: 9},
+      {calc1: 10, calc2: 9,   outcomeBand: 10},
+      {calc1: 10, calc2: 10,  outcomeBand: 10}
+    ];
+
+    /* PREPARE GRADE PROFILE
+     * Weight the modules by credit value, to take account of the fact that different modules may carry different credit values
+     * For maximum compatibility with different module sizes, we convert all modules into 5-credit modules.
+     */
+    var yearsGrades = [];
+    angular.forEach($scope.years, function(year, key) {
+      var modulesGrades = [];
+      angular.forEach(year.modules, function(module, key) {
+        if (module.credits !== undefined && module.credits % 5 == 0) {
+          var mark = $scope.moduleMark(module);
+          for (var i=0; i<module.credits/5; i++) {
+            modulesGrades.push(Math.round(mark)); // apply rounding to the nearest integer for module scores
+          }
+        } else {
+          // There's something wrong with the number of credits entered
+          return null; // TODO handle this better
+        }
+      });
+      yearsGrades.push(modulesGrades);
+    });
+
+    /* Weight the module results by level, to take account of the fact that level 3 and 4 modules carry twice the weight of level 2 */
+    yearsGrades[1].push.apply(yearsGrades[1], yearsGrades[1]); // third year
+    if ($scope.degreeLength == 4) {
+      yearsGrades[2].push.apply(yearsGrades[2], yearsGrades[2]); // fourth year
+    }
+
+    // Put all credits into one array, since knowing which year they came from isn't needed any more.
+    var allGrades = yearsGrades[0].concat(yearsGrades[1]);
+    if ($scope.degreeLength == 4) {
+      allGrades = allGrades.concat(yearsGrades[2]);
+    }
+
+
+    /* CALCULATION 1: WEIGHTED AVERAGE GRADE
+     * Calculate the average module percentage, rounded to 1 decimal place. This then determines the student's first grade band.
+     */
+    var weightedAverageGrade = 0;
+    for (var i=0; i<allGrades.length; i++) {
+      weightedAverageGrade += allGrades[i];
+    }
+    weightedAverageGrade /= allGrades.length;
+
+    // Find the band that the weighted average falls in
+    var weightedAverageGradeBandIndex;
+    for (var bandIndex=0; bandIndex<GRADE_BANDS_1.length; bandIndex++) {
+      band = GRADE_BANDS_1[bandIndex];
+      if (weightedAverageGrade >= band.lower && weightedAverageGrade < band.upper) {
+        weightedAverageGradeBandIndex = bandIndex;
+        break;
+      }
+    }
+
+    /* CALCULATION 2: DISTRIBUTION OF WEIGHTED GRADES
+     * The median grade (36th for 3-year, 60th for 4-year) indicates the second grade band. Another grade is checked (30th for 3-year,
+     * 50th for 4-year) to determine whether the student should be in the borderline band to the grade above. If the further-up grade
+     * is in a higher band, then the outcome is the borderline band with the band above.
+     */
+    allGrades.sort(function(a,b) {return b - a;}); // sort numerically in descending order
+
+    var medianGrade;
+    var higherGrade;
+    if ($scope.degreeLength == 3) {
+      medianGrade = allGrades[35];
+      higherGrade = allGrades[29];
+    } else {
+      medianGrade = allGrades[59];
+      higherGrade = allGrades[49];
+    }
+
+    // Find the band for the two grades
+    var medianBandIndex;
+    var higherBandIndex;
+    for (var bandIndex=0; bandIndex<GRADE_BANDS_2.length; bandIndex++) {
+      band = GRADE_BANDS_2[bandIndex];
+      if (medianGrade >= band.lower && medianGrade < band.upper) {
+        medianBandIndex = bandIndex;
+      }
+      if (higherGrade >= band.lower && higherGrade < band.upper) {
+        higherBandIndex = bandIndex;
+      }
+    }
+
+    // If the two bands are the same, then the final band for calculation 2 is that band. If the "higher" band is of the next band up, then
+    // the student gets the borderline band.
+    var gradeDistributionBandIndex;
+    if (medianBandIndex == higherBandIndex) {
+      gradeDistributionBandIndex = GRADE_BANDS_2[medianBandIndex].fullBandEquivalentIndex;
+    } else {
+      gradeDistributionBandIndex = GRADE_BANDS_2[medianBandIndex].fullBandEquivalentIndex - 1; // -1 gets the borderline band for the band above
+    }
+
+    /* DETERMINE FINAL DEGREE CLASS
+     * The final degree class is determined by combining the bands from the two previous calculations.
+     * For ease of reading and coding, the classification combination table from the guidance PDF will be used to look up the final classification.
+     */
+    var finalClassificationBandIndex = -1; // -1 represents final classification not found, which happens in rare cases where the first and second calculation bands are too far apart.
+    for (var classificationIndex=0; classificationIndex<CLASSIFICATION_COMBINATIONS.length; classificationIndex++) {
+      var band = CLASSIFICATION_COMBINATIONS[classificationIndex];
+      if (band.calc1 == weightedAverageGradeBandIndex && band.calc2 == gradeDistributionBandIndex) {
+        finalClassificationBandIndex = band.outcomeBand;
+        break;
+      }
+    }
+
+    var finalBandObject;
+    if (finalClassificationBandIndex == -1) {
+      finalBandObject = false;
+    } else {
+      finalBandObject = GRADE_BANDS_1[finalClassificationBandIndex];
+    }
+
+    return [finalBandObject, GRADE_BANDS_1[weightedAverageGradeBandIndex], GRADE_BANDS_1[gradeDistributionBandIndex]];
+  }
+
 }
