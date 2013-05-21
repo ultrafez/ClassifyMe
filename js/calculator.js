@@ -14,6 +14,7 @@ function CalculatorCtrl($scope, localStorageService) {
   ];
 
   // Set default data for new users
+  $scope.hasStarted = false;
   $scope.years = defaultYearData;
   $scope.degreeLength = 3;
   $scope.classification = null;
@@ -27,6 +28,7 @@ function CalculatorCtrl($scope, localStorageService) {
 
     if (localStorageService.get('degreeLength') == null) return;
 
+    $scope.hasStarted = localStorageService.get('hasStarted') == "true"
     $scope.degreeLength = parseInt(localStorageService.get('degreeLength'));
     $scope.years = jQuery.parseJSON(localStorageService.get('years'));
     $scope.classification = jQuery.parseJSON(localStorageService.get('classification'));
@@ -36,6 +38,7 @@ function CalculatorCtrl($scope, localStorageService) {
   $scope.saveLocalStorage = function() {
     if (!localStorageService.isSupported()) return;
 
+    localStorageService.add('hasStarted', $scope.hasStarted.toString());
     localStorageService.add('degreeLength', $scope.degreeLength);
     localStorageService.add('years', JSON.stringify($scope.years));
     localStorageService.add('classification', JSON.stringify($scope.classification));
@@ -44,7 +47,9 @@ function CalculatorCtrl($scope, localStorageService) {
   // Reset the whole form
   $scope.resetData = function() {
     if (confirm("Are you sure you want to reset all of your entered information?")) {
+      $scope.hasStarted = false;
       $scope.degreeLength = 3;
+      $scope.classification = null;
       $scope.years = defaultYearData;
     }
   }
@@ -52,6 +57,10 @@ function CalculatorCtrl($scope, localStorageService) {
   // Is saving/loading of user data possible?
   $scope.savingAvailable = function() {
     return localStorageService.isSupported();
+  }
+
+  $scope.begin = function() {
+    $scope.hasStarted = true;
   }
 
   $scope.$watch('degreeLength', function(newValue, oldValue) {

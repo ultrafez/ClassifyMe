@@ -53,6 +53,14 @@ input::-webkit-inner-spin-button {
 
 /* General styles */
 
+.blur {
+  height: 130px;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+  opacity: 0.2;
+  overflow: hidden;
+}
+
 .assessments {
   margin-bottom: 0;
 }

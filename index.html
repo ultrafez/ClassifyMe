@@ -40,139 +40,144 @@
       <p ng-show="!savingAvailable()">
         Your modules <strong>won't</strong> be saved if you browse away from this page, but if you visit this page in a more modern browser such as <a href="http://google.com/chrome">Google Chrome</a> or <a href="http://www.getfirefox.com">Mozilla Firefox</a>, then your changes will be saved automatically.
       </p>
+
+      <button class="btn btn-success btn-large" ng-hide="hasStarted" ng-click="begin()"><i class="icon-arrow-right"></i> Begin</button>
       
       <hr />
-
-      <section>
-        <h2>1. How long is your degree?</h2>
-        <label for="numYears3" class="radio">
-          <input type="radio" name="numYears" value="3" id="numYears3" checked ng-model="degreeLength" />3 years
-        </label>
-        <label for="numYears4" class="radio">
-          <input type="radio" name="numYears" value="4" id="numYears4" ng-model="degreeLength" />4 years (integrated Master's)
-        </label>
-      </section>
-
-      <hr />
-
-      <section>
-        <button class="btn btn-small pull-right" ng-click="resetData()">Reset</button>
-        <h2>2. Enter module results</h2>
-
-        <p>Your module results from previous academic years are available <a href="https://www.shef.ac.uk/exam-results/LDP/previous.html" target="_blank">on the University website</a>.</p>
-
-        <ul class="unstyled">
-          <li ng-repeat="year in years">
-            <fieldset class="year">
-              <legend>Year {{year.year}} <span class="pull-right" ng-show="totalCredits(year) == 120">Overall {{ yearMark(year) | number:1 }}%</span></legend>
-
-              <div class="alert alert-info" ng-show="$index==years.length-1">
-                <strong>Don't know all of your module results?</strong> You can click "Add Assessments" for a module to enter your individual assignment/exam marks that you already know, and estimate how well you think you'll do at the rest.
-              </div>
-
-              <div class="module well well-small" ng-repeat="module in year.modules">
-                <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
-                  <input type="text" class="module-name" ng-model="module.name" placeholder="Module name/code (optional)" />
-                  <div class="input-append" title="Credits must be multiples of 5">
-                    <input type="number" min="0" max="120" required ng-model="module.credits" ng-pattern="creditsRegex" class="input-supermini" />
-                    <span class="add-on">credits</span>
-                  </div>
-                  <span class="input-append" ng-show="module.isSingleRow">
-                    <input type="number" class="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark">
-                    <span class="add-on">% mark</span>
-                  </span>
-                  <span class="input-append" ng-hide="module.isSingleRow">
-                    <input type="text" class="input-supermini" disabled value="{{moduleMark(module) | number:0}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage." />
-                    <span class="add-on">% mark</span>
-                  </span>
-                  <span class="pull-right">
-                    <button ng-click="convertToMultiple(module)" class="btn btn-info btn-small" ng-show="module.isSingleRow">Add Assessments...</button>
-                    <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-small"><i class="icon-trash icon-white"></i> Remove module</button>
-                  </span>
+      
+      <div ng-class="{'blur': !hasStarted}">
+        
+        <section>
+          <h2>1. How long is your degree?</h2>
+          <label for="numYears3" class="radio">
+            <input type="radio" name="numYears" value="3" id="numYears3" checked ng-model="degreeLength" />3 years
+          </label>
+          <label for="numYears4" class="radio">
+            <input type="radio" name="numYears" value="4" id="numYears4" ng-model="degreeLength" />4 years (integrated Master's)
+          </label>
+        </section>
+        
+        <hr />
+        
+        <section>
+          <button class="btn btn-small pull-right" ng-click="resetData()">Reset</button>
+          <h2>2. Enter module results</h2>
+        
+          <p>Your module results from previous academic years are available <a href="https://www.shef.ac.uk/exam-results/LDP/previous.html" target="_blank">on the University website</a>.</p>
+        
+          <ul class="unstyled">
+            <li ng-repeat="year in years">
+              <fieldset class="year">
+                <legend>Year {{year.year}} <span class="pull-right" ng-show="totalCredits(year) == 120">Overall {{ yearMark(year) | number:1 }}%</span></legend>
+        
+                <div class="alert alert-info" ng-show="$index==years.length-1">
+                  <strong>Don't know all of your module results?</strong> You can click "Add Assessments" for a module to enter your individual assignment/exam marks that you already know, and estimate how well you think you'll do at the rest.
                 </div>
-                <table class="table table-striped assessments" ng-hide="module.isSingleRow">
-                  <thead>
-                    <tr>
-                      <th class="span6">Assessment Name</th>
-                      <th class="span2"><abbr title="What percentage of this module is each assessment worth?">Weighting</abbr></th>
-                      <th class="span2">Your Mark</th>
-                      <th class="span2"></th>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <td colspan="4">
-                        <button class="btn btn-small" ng-click="addAssessment(module)"><i class="icon-plus"></i> Add assessment</button>
-                        <span class="text-error" ng-show="totalWeight(module)!=100">Assessment weights don't add up to 100%</span>
-                      </td>
-                    </tr>
-                  </tfoot>
-                  <tbody>
-                    <tr ng-repeat="assessment in module.assessments">
-                      <td class="span6">
-                        <input type="text" ng-model="assessment.name" class="input-block-level" placeholder="e.g. Exam" />
-                      </td>
-                      <td class="span2">
-                        <div class="input-append input-block-level">
-                          <input type="number" min="0" max="100" class="input-block-level" ng-model="assessment.weight" />
-                          <span class="add-on">%</span>
-                        </div>
-                      </td>
-                      <td class="span2">
-                        <div class="input-append input-block-level">
-                          <input type="number" min="0" max="100" class="input-block-level" ng-model="assessment.mark" />
-                          <span class="add-on">%</span>
-                        </div>
-                      </td>
-                      <td class="span2">
-                        <button class="btn btn-small" title="Duplicate this assessment" ng-click="duplicateAssessment(module, $index)"><i class="icon-copy"></i></button>
-                        <button class="btn btn-danger btn-small" title="Delete this assessment" ng-click="deleteAssessment(module, $index)"><i class="icon-trash icon-white"></i></button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+        
+                <div class="module well well-small" ng-repeat="module in year.modules">
+                  <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
+                    <input type="text" class="module-name" ng-model="module.name" placeholder="Module name/code (optional)" />
+                    <div class="input-append" title="Credits must be multiples of 5">
+                      <input type="number" min="0" max="120" required ng-model="module.credits" ng-pattern="creditsRegex" class="input-supermini" />
+                      <span class="add-on">credits</span>
+                    </div>
+                    <span class="input-append" ng-show="module.isSingleRow">
+                      <input type="number" class="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark">
+                      <span class="add-on">% mark</span>
+                    </span>
+                    <span class="input-append" ng-hide="module.isSingleRow">
+                      <input type="text" class="input-supermini" disabled value="{{moduleMark(module) | number:0}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage." />
+                      <span class="add-on">% mark</span>
+                    </span>
+                    <span class="pull-right">
+                      <button ng-click="convertToMultiple(module)" class="btn btn-info btn-small" ng-show="module.isSingleRow">Add Assessments...</button>
+                      <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-small"><i class="icon-trash icon-white"></i> Remove module</button>
+                    </span>
+                  </div>
+                  <table class="table table-striped assessments" ng-hide="module.isSingleRow">
+                    <thead>
+                      <tr>
+                        <th class="span6">Assessment Name</th>
+                        <th class="span2"><abbr title="What percentage of this module is each assessment worth?">Weighting</abbr></th>
+                        <th class="span2">Your Mark</th>
+                        <th class="span2"></th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <td colspan="4">
+                          <button class="btn btn-small" ng-click="addAssessment(module)"><i class="icon-plus"></i> Add assessment</button>
+                          <span class="text-error" ng-show="totalWeight(module)!=100">Assessment weights don't add up to 100%</span>
+                        </td>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <tr ng-repeat="assessment in module.assessments">
+                        <td class="span6">
+                          <input type="text" ng-model="assessment.name" class="input-block-level" placeholder="e.g. Exam" />
+                        </td>
+                        <td class="span2">
+                          <div class="input-append input-block-level">
+                            <input type="number" min="0" max="100" class="input-block-level" ng-model="assessment.weight" />
+                            <span class="add-on">%</span>
+                          </div>
+                        </td>
+                        <td class="span2">
+                          <div class="input-append input-block-level">
+                            <input type="number" min="0" max="100" class="input-block-level" ng-model="assessment.mark" />
+                            <span class="add-on">%</span>
+                          </div>
+                        </td>
+                        <td class="span2">
+                          <button class="btn btn-small" title="Duplicate this assessment" ng-click="duplicateAssessment(module, $index)"><i class="icon-copy"></i></button>
+                          <button class="btn btn-danger btn-small" title="Delete this assessment" ng-click="deleteAssessment(module, $index)"><i class="icon-trash icon-white"></i></button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+        
+                <div ng-show="creditsNeeded(year) > 0">
+                  <button class="btn btn-primary" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
+                  <span class="text-error">You need to add modules worth an extra {{creditsNeeded(year)}} credits to this year to reach the full 120 credits.</span>
+                </div>
+                <div>
+                  <button ng-show="creditsNeeded(year) <= 0" class="btn" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
+                  <span class="text-error" ng-show="creditsOver(year) > 0">Your modules total {{totalCredits(year)}} credits for this year; remove {{creditsOver(year)}} credits worth of modules to get to a total of 120 credits.</span>
+                </div>
+              </fieldset>
+            </li>
+          </ul>
+        </section>
+        
+        <hr />
+        
+        <section>
+          <h2>3. Calculate classification</h2>
+          <div ng-show="classification!=null">
+            <p>Based on the information you entered above, your degree classification should be:</p>
+            <div class="classification">
+              <div ng-show="classification.finalBandIncalculable">
+                <p>It was not possible to calculate your final classification, as the two bands that are used to calculate it are too different - your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }} are too far apart for them to be combined to form a final classification.</p>
+                <p>In this situation, the Examiners will recommend a degree classification which, having regard to all the evidence before them, best reflects your overall performance.</p>
               </div>
-
-              <div ng-show="creditsNeeded(year) > 0">
-                <button class="btn btn-primary" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
-                <span class="text-error">You need to add modules worth an extra {{creditsNeeded(year)}} credits to this year to reach the full 120 credits.</span>
+              <div ng-hide="classification.finalBandIncalculable">
+                <strong>{{classification.finalBand.name}}</strong>
+                <p ng-show="classification.combinedBand.isBorderline">
+                  Your calculated classification was {{classification.combinedBand.name}}, but since it was borderline, the normal practice by the Examiners is to take your weighted average final year grade of {{ classification.weightedAverageFinalYearGrade | number:1 }}% into account to determine the final classification, which is what was done to produce the classification above.
+                </p>
+                <p>This final classification is calculated from the combination of your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }}.</p>
               </div>
-              <div>
-                <button ng-show="creditsNeeded(year) <= 0" class="btn" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
-                <span class="text-error" ng-show="creditsOver(year) > 0">Your modules total {{totalCredits(year)}} credits for this year; remove {{creditsOver(year)}} credits worth of modules to get to a total of 120 credits.</span>
-              </div>
-            </fieldset>
-          </li>
-        </ul>
-      </section>
-
-      <hr />
-
-      <section>
-        <h2>3. Calculate classification</h2>
-        <div ng-show="classification!=null">
-          <p>Based on the information you entered above, your degree classification should be:</p>
-          <div class="classification">
-            <div ng-show="classification.finalBandIncalculable">
-              <p>It was not possible to calculate your final classification, as the two bands that are used to calculate it are too different - your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }} are too far apart for them to be combined to form a final classification.</p>
-              <p>In this situation, the Examiners will recommend a degree classification which, having regard to all the evidence before them, best reflects your overall performance.</p>
             </div>
-            <div ng-hide="classification.finalBandIncalculable">
-              <strong>{{classification.finalBand.name}}</strong>
-              <p ng-show="classification.combinedBand.isBorderline">
-                Your calculated classification was {{classification.combinedBand.name}}, but since it was borderline, the normal practice by the Examiners is to take your weighted average final year grade of {{ classification.weightedAverageFinalYearGrade | number:1 }}% into account to determine the final classification, which is what was done to produce the classification above.
-              </p>
-              <p>This final classification is calculated from the combination of your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }}.</p>
-            </div>
+            <p>Everything you've entered on this page is <strong>automatically saved</strong>, so you can come back to this page later and you won't have to re-enter everything.</p>
           </div>
-          <p>Everything you've entered on this page is <strong>automatically saved</strong>, so you can come back to this page later and you won't have to re-enter everything.</p>
-        </div>
-        <div ng-show="classification==null">
-          <p>Please fully complete the form above to calculate your final classification.</p>
-        </div>
-      </section>
-
-      <hr />
+          <div ng-show="classification==null">
+            <p>Please fully complete the form above to calculate your final classification.</p>
+          </div>
+        </section>
+        
+        <hr />
+      </div>
 
       <section class="disclaimer">
         <p class="muted">
