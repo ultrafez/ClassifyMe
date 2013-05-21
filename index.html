@@ -33,7 +33,7 @@
       </div>
       <p class="lead">Calculate your final University of Sheffield degree classification by entering your module results.</p>
       <p>By entering your module results (or expected module results) below, you can find out what degree classification you should receive at Graduation. You can either enter the mark you got for whole modules, or you can enter the individual assessments that make up a module, if you don't have the full module result yet.</p>
-      <p>This tool can only be used for standard 3-year undergraduate degrees, and 4-year integrated Master's degrees (e.g. MComp, MEng, MChem) that don't include a year in industry or year abroad. <a data-placement="bottom" data-trigger="hover" data-content="Courses that have a year in industry or a year abroad can differ between departments in how their classifications are calculated, making it difficult to make an accurate calculate that works for all departments." class="activate-popover">Why?</a></p>
+      <p>This tool can only be used for standard 3-year undergraduate degrees, and 4-year integrated Master's degrees (e.g. MComp, MEng, MChem) that don't include a year in industry or year abroad. <a data-placement="bottom" data-trigger="hover" data-content="Courses that have a year in industry or a year abroad can differ between departments in how their classifications are calculated, making it difficult to make an accurate calculate that works for all departments." class="js-activate-popover">Why?</a></p>
       <p ng-show="savingAvailable()">
         Everything you enter will automatically be saved, so next time you visit this page your modules will still be here.
       </p>
@@ -58,6 +58,8 @@
       <section>
         <button class="btn btn-small pull-right" ng-click="resetData()">Reset</button>
         <h2>2. Enter module results</h2>
+
+        <p>Your module results from previous academic years are available <a href="https://www.shef.ac.uk/exam-results/LDP/previous.html" target="_blank">on the University website</a>.</p>
 
         <ul class="unstyled">
           <li ng-repeat="year in years">

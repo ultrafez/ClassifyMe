@@ -424,5 +424,5 @@ function CalculatorCtrl($scope, localStorageService) {
 
 // Enable popovers
 $(function() {
-  $('.activate-popover').popover();
+  $('.js-activate-popover').popover();
 });
