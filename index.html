@@ -63,7 +63,7 @@
                     <span class="add-on">% mark</span>
                   </span>
                   <span class="input-append" ng-hide="module.isSingleRow">
-                    <input type="text" class="input-supermini" disabled value="{{moduleMark(module) | number:0}}" />
+                    <input type="text" class="input-supermini" disabled value="{{moduleMark(module) | number:0}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage." />
                     <span class="add-on">% mark</span>
                   </span>
                   <span class="pull-right">
@@ -131,19 +131,24 @@
 
       <section>
         <h2>3. Calculate classification</h2>
-        <p>Based on the information you entered above, your degree classification should be:</p>
-        <div class="classification">
-          <div ng-show="classification.finalBandIncalculable">
-            <p>It was not possible to calculate your final classification, as the two bands that are used to calculate it are too different - your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }} are too far apart for them to be combined to form a final classification.</p>
-            <p>In this situation, the Examiners will recommend a degree classification which, having regard to all the evidence before them, best reflects your overall performance.</p>
+        <div ng-show="classification!=null">
+          <p>Based on the information you entered above, your degree classification should be:</p>
+          <div class="classification">
+            <div ng-show="classification.finalBandIncalculable">
+              <p>It was not possible to calculate your final classification, as the two bands that are used to calculate it are too different - your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }} are too far apart for them to be combined to form a final classification.</p>
+              <p>In this situation, the Examiners will recommend a degree classification which, having regard to all the evidence before them, best reflects your overall performance.</p>
+            </div>
+            <div ng-hide="classification.finalBandIncalculable">
+              <strong>{{classification.finalBand.name}}</strong>
+              <p ng-show="classification.combinedBand.isBorderline">
+                Your calculated classification was {{classification.combinedBand.name}}, but since it was borderline, the normal practice by the Examiners is to take your weighted average final year grade of {{ classification.weightedAverageFinalYearGrade | number:1 }}% into account to determine the final classification, which is what was done to produce the classification above.
+              </p>
+              <p>This final classification is calculated from the combination of your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }}.</p>
+            </div>
           </div>
-          <div ng-hide="classification.finalBandIncalculable">
-            <strong>{{classification.finalBand.name}}</strong>
-            <p ng-show="classification.combinedBand.isBorderline">
-              Your calculated classification was {{classification.combinedBand.name}}, but since it was borderline, the normal practice by the Examiners is to take your weighted average final year grade of {{ classification.weightedAverageFinalYearGrade | number:1 }}% into account to determine the final classification, which is what was done to produce the classification above.
-            </p>
-            <p>This final classification is calculated from the combination of your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }}.</p>
-          </div>
+        </div>
+        <div ng-show="classification==null">
+          <p>Please fully complete the form above to calculate your final classification.</p>
         </div>
       </section>
     </div>
