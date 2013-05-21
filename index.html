@@ -40,12 +40,16 @@
       </div>
       <p class="lead">Calculate your final University of Sheffield degree classification by entering your module results.</p>
       <p>By entering your module results (or expected module results) below, you can find out what degree classification you should receive at Graduation. You can either enter the mark you got for whole modules, or you can enter the individual assessments that make up a module, if you don't have the full module result yet.</p>
-      <p>This tool can only be used for standard 3-year undergraduate degrees, and 4-year integrated Master's degrees (e.g. MComp, MEng, MChem) that don't include a year in industry or year abroad. <a data-placement="bottom" data-trigger="hover" data-content="Courses that have a year in industry or a year abroad can differ between departments in how their classifications are calculated, making it difficult to make an accurate calculate that works for all departments." class="js-activate-popover">Why?</a></p>
+      <p>This tool can only be used for standard 3-year undergraduate degrees, and 4-year integrated Master's degrees (e.g. MComp, MEng, MChem) that don't include a year in industry or year abroad (<a data-placement="bottom" data-trigger="hover" data-content="Courses that have a year in industry or a year abroad can differ between departments in how their classifications are calculated, making it difficult to make an accurate calculate that works for all departments." class="js-activate-popover">why?</a>). The calculator doesn't take into account failed modules, so if you expect to graduate with less than all of your credits then you will have to check with your department to find out what their rules are.</p>
       <p ng-show="savingAvailable()">
         Everything you enter will be <strong>automatically saved</strong>, so next time you visit this page everything you've entered will still be here.
       </p>
       <p ng-show="!savingAvailable()">
         Your modules <strong>won't</strong> be saved if you browse away from this page, but if you visit this page in a more modern browser such as <a href="http://google.com/chrome">Google Chrome</a> or <a href="http://www.getfirefox.com">Mozilla Firefox</a>, then your changes will be saved automatically.
+      </p>
+
+      <p class="text-error disclaimer">
+        This calculator was written based on the <a href="http://www.shef.ac.uk/polopoly_fs/1.109994!/file/LeTS-guidance-new-methodology.pdf" target="_blank">"Degree Classification" guidelines</a> for Bachelor's degrees, which are published by the University. This calculator uses a weighting scheme where credits are worth double in Level 3 and Level 4, which is the case for most standard degrees - check with your department to be sure. While this tool has been tested, the author takes no responsibility for any inaccuracies in calculations.
       </p>
 
       <button class="btn btn-success btn-large" ng-hide="hasStarted" ng-click="begin()"><i class="icon-arrow-right"></i> Begin</button>
@@ -182,15 +186,7 @@
             <p>Please fully complete the form above to calculate your final classification.</p>
           </div>
         </section>
-        
-        <hr />
       </div>
-
-      <section class="disclaimer">
-        <p class="muted">
-          This calculator was written based on the <a href="http://www.shef.ac.uk/polopoly_fs/1.109994!/file/LeTS-guidance-new-methodology.pdf">"Degree Classification" guidelines</a>, which are published by the University. While this tool has been tested, no responsibility is taken for any inaccuracies in calculating the final classification.
-        </p>
-      </section>
     </div>
     <div id="push"></div>
   </div>

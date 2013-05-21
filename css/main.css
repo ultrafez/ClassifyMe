@@ -53,6 +53,13 @@ input::-webkit-inner-spin-button {
 
 /* General styles */
 
+.disclaimer {
+  margin: 15px -15px;
+  padding: 15px;
+  -webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;
+  border: solid 1px #ddd;
+}
+
 .blur {
   height: 130px;
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
@@ -100,8 +107,8 @@ input::-webkit-inner-spin-button {
   margin-bottom: 0;
 }
 
-.disclaimer {
-  margin-top: 50px;
+section:last-child {
+  margin-bottom: 50px;
 }
 
 #push, #footer {
