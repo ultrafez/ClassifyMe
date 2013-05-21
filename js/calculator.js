@@ -18,6 +18,9 @@ function CalculatorCtrl($scope, localStorageService) {
   $scope.degreeLength = 3;
   $scope.classification = null;
 
+  // Define regex validation for credits - multiples of 5
+  $scope.creditsRegex = /[0-9]*[05]$/;
+
   // Load saved data from local storage into Angular model
   $scope.loadLocalStorage = function() {
     if (!localStorageService.isSupported()) return;
@@ -251,12 +254,14 @@ function CalculatorCtrl($scope, localStorageService) {
      * For maximum compatibility with different module sizes, we convert all modules into 5-credit modules.
      */
     var yearsGrades = [];
-    angular.forEach($scope.years, function(year, key) {
+    for (var i=0; i<$scope.years.length; i++) {
+      year = $scope.years[i];
       var modulesGrades = [];
-      angular.forEach(year.modules, function(module, key) {
+      for (var j=0; j<year.modules.length; j++) {
+        var module = year.modules[j];
         if (module.credits !== undefined && module.credits % 5 == 0) {
           var mark = $scope.moduleMark(module);
-          for (var i=0; i<module.credits/5; i++) {
+          for (var k=0; k<module.credits/5; k++) {
             modulesGrades.push(Math.round(mark)); // apply rounding to the nearest integer for module scores
           }
         } else {
@@ -264,7 +269,7 @@ function CalculatorCtrl($scope, localStorageService) {
           $scope.classification = null;
           return;
         }
-      });
+      }
 
       // There should be modules summing to 120 credits per year in a correctly filled-in form - if this isn't the case, stop now.
       if (modulesGrades.length != 120/5) {
@@ -272,7 +277,7 @@ function CalculatorCtrl($scope, localStorageService) {
         return;
       }
       yearsGrades.push(modulesGrades);
-    });
+    }
 
     /* Weight the module results by level, to take account of the fact that level 3 and 4 modules carry twice the weight of level 2 */
     yearsGrades[1].push.apply(yearsGrades[1], yearsGrades[1]); // third year

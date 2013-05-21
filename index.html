@@ -54,8 +54,8 @@
               <div class="module well well-small" ng-repeat="module in year.modules">
                 <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
                   <input type="text" class="module-name" ng-model="module.name" placeholder="Module name/code (optional)" />
-                  <div class="input-append">
-                    <input type="number" min="0" max="120" required ng-model="module.credits" class="input-supermini" />
+                  <div class="input-append" title="Credits must be multiples of 5">
+                    <input type="number" min="0" max="120" required ng-model="module.credits" ng-pattern="creditsRegex" class="input-supermini" />
                     <span class="add-on">credits</span>
                   </div>
                   <span class="input-append" ng-show="module.isSingleRow">

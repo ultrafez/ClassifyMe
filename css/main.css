@@ -19,11 +19,19 @@ td.span2 .input-block-level input {
   width: 30px;
 }
 
-input:invalid, textarea:invalid, select:invalid {
+input:invalid, input.ng-invalid {
   border-color: #e9322d;
 }
 
-input:invalid + .add-on {
+input.ng-invalid:focus {
+  color: #b94a48;
+  border-color: #e9322d;
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+     -moz-box-shadow: 0 0 6px #f8b9b7;
+          box-shadow: 0 0 6px #f8b9b7;
+}
+
+input:invalid + .add-on, input.ng-invalid + .add-on {
   color: #e9322d;
 }
 
