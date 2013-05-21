@@ -162,7 +162,6 @@ function CalculatorCtrl($scope, localStorageService) {
   }
 
   $scope.duplicateAssessment = function(module, assessmentIndex) {
-    console.log(module.assessments[assessmentIndex]);
     module.assessments.push(angular.copy(module.assessments[assessmentIndex]));
   }
 
@@ -175,8 +174,6 @@ function CalculatorCtrl($scope, localStorageService) {
 
 
   // Calculate the student's degree classification based on the information they have entered.
-  // TODO check if this is right: Returns an array containing the final classification band (object), the band for the average weighted grade, the band for the distribution, and the average weighted percentage.
-  // TODO: check that each year adds up to 120 credits
   $scope.calculateClassification = function() {
     /* DEFINE GRADE BANDS */
     // First grade band is used for the weighted average band
@@ -263,10 +260,17 @@ function CalculatorCtrl($scope, localStorageService) {
             modulesGrades.push(Math.round(mark)); // apply rounding to the nearest integer for module scores
           }
         } else {
-          // There's something wrong with the number of credits entered
-          return null; // TODO handle this better
+          // A module has an invalid number of credits entered. The calculation cannot continue.
+          $scope.classification = null;
+          return;
         }
       });
+
+      // There should be modules summing to 120 credits per year in a correctly filled-in form - if this isn't the case, stop now.
+      if (modulesGrades.length != 120/5) {
+        $scope.classification = null;
+        return;
+      }
       yearsGrades.push(modulesGrades);
     });
 
@@ -367,7 +371,7 @@ function CalculatorCtrl($scope, localStorageService) {
         for (var i=0; i<yearsGrades[yearsGrades.length-1].length; i++) {
           weightedAverageFinalYearGrade += yearsGrades[yearsGrades.length-1][i];
         }
-        weightedAverageFinalYearGrade /= yearsGrades[yearsGrades.length].length;
+        weightedAverageFinalYearGrade /= yearsGrades[yearsGrades.length-1].length;
 
         // Find the band that the average final year grade belongs to
         for (var i=0; i<GRADE_BANDS_2.length; i++) {
