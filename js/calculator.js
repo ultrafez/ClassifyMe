@@ -415,5 +415,9 @@ function CalculatorCtrl($scope, localStorageService) {
       weightedAverageFinalYearGrade: weightedAverageFinalYearGrade
     }
   }
-
 }
+
+// Enable popovers
+$(function() {
+  $('.activate-popover').popover();
+});
