@@ -63,7 +63,7 @@
                     <span class="add-on">% mark</span>
                   </span>
                   <span class="input-append" ng-hide="module.isSingleRow">
-                    <input type="text" class="input-supermini" disabled value="{{moduleMark(module)}}" />
+                    <input type="text" class="input-supermini" disabled value="{{moduleMark(module) | number:0}}" />
                     <span class="add-on">% mark</span>
                   </span>
                   <span class="pull-right">
