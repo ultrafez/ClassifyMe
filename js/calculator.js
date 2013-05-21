@@ -16,6 +16,7 @@ function CalculatorCtrl($scope, localStorageService) {
   // Set default data for new users
   $scope.years = defaultYearData;
   $scope.degreeLength = 3;
+  $scope.classification = null;
 
   // Load saved data from local storage into Angular model
   $scope.loadLocalStorage = function() {
@@ -25,6 +26,7 @@ function CalculatorCtrl($scope, localStorageService) {
 
     $scope.degreeLength = parseInt(localStorageService.get('degreeLength'));
     $scope.years = jQuery.parseJSON(localStorageService.get('years'));
+    $scope.classification = jQuery.parseJSON(localStorageService.get('classification'));
   }
 
   // Save current data into local storage
@@ -33,6 +35,7 @@ function CalculatorCtrl($scope, localStorageService) {
 
     localStorageService.add('degreeLength', $scope.degreeLength);
     localStorageService.add('years', JSON.stringify($scope.years));
+    localStorageService.add('classification', JSON.stringify($scope.classification));
   }
 
   // Reset the whole form
@@ -65,6 +68,9 @@ function CalculatorCtrl($scope, localStorageService) {
   // When the user changes any of their module data, save it to local storage.
   $scope.$watch('years', function(newValue, oldValue) {
     if (newValue === oldValue) return;
+
+    // Calculate the final degree classification.
+    $scope.calculateClassification();
 
     // Save the data to local storage for user convenience
     $scope.saveLocalStorage();
@@ -169,6 +175,7 @@ function CalculatorCtrl($scope, localStorageService) {
 
 
   // Calculate the student's degree classification based on the information they have entered.
+  // TODO check if this is right: Returns an array containing the final classification band (object), the band for the average weighted grade, the band for the distribution, and the average weighted percentage.
   // TODO: check that each year adds up to 120 credits
   $scope.calculateClassification = function() {
     /* DEFINE GRADE BANDS */
@@ -334,19 +341,52 @@ function CalculatorCtrl($scope, localStorageService) {
       gradeDistributionBandIndex = GRADE_BANDS_2[medianBandIndex].fullBandEquivalentIndex - 1; // -1 gets the borderline band for the band above
     }
 
-    /* DETERMINE FINAL DEGREE CLASS
-     * The final degree class is determined by combining the bands from the two previous calculations.
+    /* DETERMINE COMBINED CALCULATED DEGREE CLASS
+     * The two calculated bands are combined to form an almost-final degree class.
      * For ease of reading and coding, the classification combination table from the guidance PDF will be used to look up the final classification.
      */
-    var finalClassificationBandIndex = -1; // -1 represents final classification not found, which happens in rare cases where the first and second calculation bands are too far apart.
+    var combinedClassificationBandIndex = -1; // -1 represents final classification not found, which happens in rare cases where the first and second calculation bands are too far apart.
     for (var classificationIndex=0; classificationIndex<CLASSIFICATION_COMBINATIONS.length; classificationIndex++) {
       var band = CLASSIFICATION_COMBINATIONS[classificationIndex];
       if (band.calc1 == weightedAverageGradeBandIndex && band.calc2 == gradeDistributionBandIndex) {
-        finalClassificationBandIndex = band.outcomeBand;
+        combinedClassificationBandIndex = band.outcomeBand;
         break;
       }
     }
 
+
+    /* DETERMINE FINAL DEGREE CLASS
+     * For students whose combined band is borderline, the average weighted grade of modules taken in the final year is used to determine which classification
+     * either side of the border the student should get.
+     */
+    var finalClassificationBandIndex;
+    var weightedAverageFinalYearGrade = 0;
+    if (combinedClassificationBandIndex != -1) {
+      if (GRADE_BANDS_1[combinedClassificationBandIndex].isBorderline) {
+        // Calculate average final year grade
+        for (var i=0; i<yearsGrades[yearsGrades.length-1].length; i++) {
+          weightedAverageFinalYearGrade += yearsGrades[yearsGrades.length-1][i];
+        }
+        weightedAverageFinalYearGrade /= yearsGrades[yearsGrades.length].length;
+
+        // Find the band that the average final year grade belongs to
+        for (var i=0; i<GRADE_BANDS_2.length; i++) {
+          var band = GRADE_BANDS_2[i];
+          if (weightedAverageFinalYearGrade >= band.lower && weightedAverageFinalYearGrade < band.upper) {
+            finalClassificationBandIndex = band.fullBandEquivalentIndex;
+            break;
+          }
+        }
+      } else {
+        // The combined grade isn't borderline, so no more calculation necessary
+        finalClassificationBandIndex = combinedClassificationBandIndex;
+      }
+    } else {
+      // The combined band grade wasn't calculable, so we can't calculate any further
+      finalClassificationBandIndex = combinedClassificationBandIndex;
+    }
+
+    // Get the band object for the final classification
     var finalBandObject;
     if (finalClassificationBandIndex == -1) {
       finalBandObject = false;
@@ -354,7 +394,22 @@ function CalculatorCtrl($scope, localStorageService) {
       finalBandObject = GRADE_BANDS_1[finalClassificationBandIndex];
     }
 
-    return [finalBandObject, GRADE_BANDS_1[weightedAverageGradeBandIndex], GRADE_BANDS_1[gradeDistributionBandIndex]];
+    var combinedBandObject;
+    if (combinedClassificationBandIndex == -1) {
+      combinedBandObject = false;
+    } else {
+      combinedBandObject = GRADE_BANDS_1[combinedClassificationBandIndex];
+    }
+    
+    $scope.classification = {
+      finalBand: finalBandObject,
+      finalBandIncalculable: combinedBandObject===false,
+      combinedBand: combinedBandObject,
+      weightedAverageGradeBand: GRADE_BANDS_1[weightedAverageGradeBandIndex],
+      gradeDistributionBand: GRADE_BANDS_1[gradeDistributionBandIndex],
+      weightedAverageGrade: weightedAverageGrade,
+      weightedAverageFinalYearGrade: weightedAverageFinalYearGrade
+    }
   }
 
 }

@@ -77,11 +77,11 @@ input::-webkit-inner-spin-button {
 }
 
 .classification p {
-  margin-bottom: 0;
+  margin-bottom: 10px;
 }
 
-.classification p + p {
-  margin-bottom: 10px;
+.classification p:last-child {
+  margin-bottom: 0;
 }
 
 #push, #footer {
