@@ -443,5 +443,4 @@ function CalculatorCtrl($scope, localStorageService) {
 // Enable popovers
 $(function() {
   $('.js-activate-popover').popover();
-  $('#grade-distribution .description').tooltip();
 });
