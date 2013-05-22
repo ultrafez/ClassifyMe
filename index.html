@@ -183,7 +183,7 @@
                 <a href="" data-toggle="collapse" data-target="#grade-distribution">Show grade distribution</a>
               </p>
               <div id="grade-distribution" class="collapse">
-                <p>Your grade distribution band is calculated by taking your median module score (all modules are converted into 5-credit units) and placing it in a band. The {{higherIndex+1}}th module score is then placed in a band in the same was as the median. If the {{higherIndex+1}}th score is in a higher band than the median, then your grade distribution band is the borderline band between the two bands.</p>
+                <p>Your grade distribution band is calculated by taking your median module score (all modules are converted into 5-credit units) and placing it in a band. The {{higherIndex+1}}th module score is then placed in a band in the same way as the median. If the {{higherIndex+1}}th score is in a higher band than the median, then your grade distribution band is the borderline band between the two bands.</p>
                 <button class="btn btn-primary" ng-click="calculateClassification();saveLocalStorage()" ng-show="classification.allGrades==null">Calculate Distribution</button>
                 <ol>
                   <li ng-repeat="grade in classification.allGrades">
