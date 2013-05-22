@@ -115,7 +115,7 @@ a {
   margin-bottom: 10px;
 }
 
-#grade-distribution {
+#grade-distribution ol {
   -moz-columns: 6;
   -webkit-columns: 6;
   list-style-position: inside;

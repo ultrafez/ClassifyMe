@@ -182,10 +182,12 @@
               <p>
                 <a href="" data-toggle="collapse" data-target="#grade-distribution">Show grade distribution</a>
               </p>
-              <ol id="grade-distribution" class="collapse">
-                <li ng-repeat="grade in classification.allGrades">
-                  <span ng-class="{'median': $index==medianIndex, 'higher': $index==higherIndex}">{{grade}}<span class="median-description description">Median</span><span class="higher-description description">Extra Check</span></li>
-              </ol>
+              <div id="grade-distribution" class="collapse">
+                <ol>
+                  <li ng-repeat="grade in classification.allGrades">
+                    <span ng-class="{'median': $index==medianIndex, 'higher': $index==higherIndex}">{{grade}}<span class="median-description description" data-toggle="tooltip" title="This grade determines your grade distribution band, subject to the borderline check.">Median</span><span class="higher-description description" data-toggle="tooltip" title="If this grade is in a higher band than the median grade, then your grade distribution band is borderline.">Borderline?</span></li>
+                </ol>
+              </div>
             </div>
             <p>Everything you've entered on this page is <strong>automatically saved</strong>, so you can come back to this page later and you won't have to re-enter everything.</p>
           </div>
