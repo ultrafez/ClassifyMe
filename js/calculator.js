@@ -147,7 +147,7 @@ function CalculatorCtrl($scope, localStorageService) {
         moduleMark += assessment.mark * (assessment.weight / 100);
       }
     });
-    return moduleMark;
+    return Math.round(moduleMark); // apply rounding to the nearest integer for module scores
   }
 
   // Get the total weighting of the assessments in the module.
@@ -272,7 +272,7 @@ function CalculatorCtrl($scope, localStorageService) {
         if (module.credits !== undefined && module.credits % 5 == 0) {
           var mark = $scope.moduleMark(module);
           for (var k=0; k<module.credits/5; k++) {
-            modulesGrades.push(Math.round(mark)); // apply rounding to the nearest integer for module scores
+            modulesGrades.push(mark);
           }
         } else {
           // A module has an invalid number of credits entered. The calculation cannot continue.
@@ -303,7 +303,7 @@ function CalculatorCtrl($scope, localStorageService) {
 
 
     /* CALCULATION 1: WEIGHTED AVERAGE GRADE
-     * Calculate the average module percentage, rounded to 1 decimal place. This then determines the student's first grade band.
+     * Calculate the average module percentage. This then determines the student's first grade band.
      */
     var weightedAverageGrade = 0;
     for (var i=0; i<allGrades.length; i++) {
