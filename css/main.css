@@ -53,6 +53,10 @@ input::-webkit-inner-spin-button {
 
 /* General styles */
 
+a {
+  cursor: pointer;
+}
+
 .disclaimer {
   margin: 15px -15px;
   padding: 15px;
@@ -86,7 +90,7 @@ input::-webkit-inner-spin-button {
 }
 
 .classification {
-  padding: 40px;
+  padding: 40px 40px 25px 40px;
   -webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;
   border: solid 1px #ddd;
   margin-top: 20px;
@@ -105,6 +109,46 @@ input::-webkit-inner-spin-button {
 
 .classification p:last-child {
   margin-bottom: 0;
+}
+
+.classification-info {
+  margin-bottom: 10px;
+}
+
+#grade-distribution {
+  -moz-columns: 6;
+  -webkit-columns: 6;
+  list-style-position: inside;
+  margin-left: 0;
+}
+
+#grade-distribution li {
+  padding-left: 10px;
+  color: #aaa;
+  font-size: 8pt;
+}
+
+#grade-distribution li span {
+  color: black;
+  font-size: 11pt;
+  padding-left: 5px;
+}
+
+#grade-distribution .description {
+  display: none;
+  font-size: 9pt;
+}
+
+#grade-distribution .median, #grade-distribution .higher {
+  font-weight: bold;
+}
+
+#grade-distribution .median .median-description {
+  display: inline;
+}
+
+#grade-distribution .higher .higher-description {
+  display: inline;
 }
 
 section:last-child {

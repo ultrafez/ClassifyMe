@@ -18,6 +18,8 @@ function CalculatorCtrl($scope, localStorageService) {
   $scope.years = defaultYearData;
   $scope.degreeLength = 3;
   $scope.classification = null;
+  $scope.medianIndex = 35; // array index for the median module score
+  $scope.higherIndex = 29; // array index for the just-above median module score
 
   // Define regex validation for credits - multiples of 5
   $scope.creditsRegex = /^[0-9]*[05]$/;
@@ -65,14 +67,26 @@ function CalculatorCtrl($scope, localStorageService) {
   }
 
   $scope.$watch('degreeLength', function(newValue, oldValue) {
+    if (newValue == 4) {
+      // Set the grade distribution indices (used in the classification calculation to work out the median and just-above the median)
+      $scope.medianIndex = 59;
+      $scope.higherIndex = 49;
+    } else {
+      // Set the grade distribution indices (used in the classification calculation to work out the median and just-above the median)
+      $scope.medianIndex = 35;
+      $scope.higherIndex = 29;
+    }
+
     if (newValue === oldValue) return;
 
     if (newValue == 4 && oldValue == 3) {
+      // Add 4th year into the "years" array
       $scope.years.push({"year": 4, "modules": []});
       return;
     }
 
     if (newValue == 3 && oldValue == 4) {
+      // Remove the 4th year
       $scope.years.splice(2, 1);
       return;
     }
@@ -328,15 +342,8 @@ function CalculatorCtrl($scope, localStorageService) {
      */
     allGrades.sort(function(a,b) {return b - a;}); // sort numerically in descending order
 
-    var medianGrade;
-    var higherGrade;
-    if ($scope.degreeLength == 3) {
-      medianGrade = allGrades[35];
-      higherGrade = allGrades[29];
-    } else {
-      medianGrade = allGrades[59];
-      higherGrade = allGrades[49];
-    }
+    var medianGrade = allGrades[$scope.medianIndex];
+    var higherGrade = allGrades[$scope.higherIndex];
 
     // Find the band for the two grades
     var medianBandIndex;
@@ -421,13 +428,14 @@ function CalculatorCtrl($scope, localStorageService) {
     }
     
     $scope.classification = {
-      finalBand: finalBandObject,
-      finalBandIncalculable: combinedBandObject===false,
-      combinedBand: combinedBandObject,
-      weightedAverageGradeBand: GRADE_BANDS_1[weightedAverageGradeBandIndex],
-      gradeDistributionBand: GRADE_BANDS_1[gradeDistributionBandIndex],
-      weightedAverageGrade: weightedAverageGrade,
-      weightedAverageFinalYearGrade: weightedAverageFinalYearGrade
+      finalBand: finalBandObject,                                             // Object containing details of the final calculated classification band
+      finalBandIncalculable: combinedBandObject===false,                      // Was the final band incalculable because the first and second calculation bands were too different?
+      combinedBand: combinedBandObject,                                       // The band calculated by combining the first and second calculations. This is pre-adjustment for borderline bands.
+      weightedAverageGradeBand: GRADE_BANDS_1[weightedAverageGradeBandIndex], // The band object for your weighted average module score.
+      gradeDistributionBand: GRADE_BANDS_1[gradeDistributionBandIndex],       // The band object for your grade distribution.
+      weightedAverageGrade: weightedAverageGrade,                             // The weighted average module score.
+      weightedAverageFinalYearGrade: weightedAverageFinalYearGrade,           // The weighted average of the modules in the final year.
+      allGrades: allGrades                                                    // An array of module scores (split into 5-credit units) in descending order.
     }
   }
 }
