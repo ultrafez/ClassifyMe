@@ -93,7 +93,7 @@
                       <span class="add-on">credits</span>
                     </div>
                     <span class="input-append" ng-show="module.isSingleRow">
-                      <input type="number" class="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark">
+                      <input type="number" class="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark" ng-pattern="integerRegex">
                       <span class="add-on">% mark</span>
                     </span>
                     <span class="input-append" ng-hide="module.isSingleRow">
@@ -129,13 +129,13 @@
                         </td>
                         <td class="span2">
                           <div class="input-append input-block-level">
-                            <input type="number" min="0" max="100" required class="input-block-level" ng-model="assessment.weight" />
+                            <input type="number" min="0" max="100" step="any" required class="input-block-level" ng-model="assessment.weight" />
                             <span class="add-on">%</span>
                           </div>
                         </td>
                         <td class="span2">
                           <div class="input-append input-block-level">
-                            <input type="number" min="0" max="100" required class="input-block-level" ng-model="assessment.mark" />
+                            <input type="number" min="0" max="100" step="any" required class="input-block-level" ng-model="assessment.mark" />
                             <span class="add-on">%</span>
                           </div>
                         </td>

@@ -20,7 +20,8 @@ function CalculatorCtrl($scope, localStorageService) {
   $scope.classification = null;
 
   // Define regex validation for credits - multiples of 5
-  $scope.creditsRegex = /[0-9]*[05]$/;
+  $scope.creditsRegex = /^[0-9]*[05]$/;
+  $scope.integerRegex = /^[0-9]+$/;
 
   // Load saved data from local storage into Angular model
   $scope.loadLocalStorage = function() {
