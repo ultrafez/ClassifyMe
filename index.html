@@ -92,11 +92,11 @@
                       <input type="number" min="0" max="120" required ng-model="module.credits" ng-pattern="creditsRegex" class="input-supermini" />
                       <span class="add-on">credits</span>
                     </div>
-                    <span class="input-append" ng-show="module.isSingleRow">
+                    <span class="input-append" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark < 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
                       <input type="number" class="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark" ng-pattern="integerRegex">
                       <span class="add-on">% mark</span>
                     </span>
-                    <span class="input-append" ng-hide="module.isSingleRow">
+                    <span class="input-append" ng-hide="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark < 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
                       <input type="text" class="input-supermini" disabled value="{{moduleMark(module)}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage." />
                       <span class="add-on">% mark</span>
                     </span>

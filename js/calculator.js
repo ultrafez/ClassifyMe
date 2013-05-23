@@ -453,4 +453,10 @@ function CalculatorCtrl($scope, localStorageService) {
 // Enable popovers
 $(function() {
   $('.js-activate-popover').popover();
+  $('body').on('mouseenter', '.failed-module', function() {
+    $(this).popover('show');
+  });
+  $('body').on('mouseleave', '.failed-module', function() {
+    $(this).popover('hide');
+  });
 });

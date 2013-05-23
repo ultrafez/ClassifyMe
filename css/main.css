@@ -35,6 +35,22 @@ input:invalid + .add-on, input.ng-invalid + .add-on {
   color: #e9322d;
 }
 
+.failed-module input {
+  border-color: #9900FF;
+}
+
+.failed-module input:focus {
+  color: #9900FF;
+  border-color: #9900FF;
+  -webkit-box-shadow: 0 0 6px #9900FF;
+     -moz-box-shadow: 0 0 6px #9900FF;
+          box-shadow: 0 0 6px #9900FF;
+}
+
+.failed-module .add-on, .failed-module input[disabled] {
+  color: #9900FF;
+}
+
 .single-row input, .single-row .input-append {
   margin-bottom: 0;
 }
