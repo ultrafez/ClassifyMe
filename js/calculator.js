@@ -199,6 +199,26 @@ function CalculatorCtrl($scope, localStorageService) {
 
   /* CLASSIFICATION */
 
+  // Second grade band is used for the grade distribution
+  $scope.GRADE_BANDS_2 = [
+    {name: "First", lower: 69.5,  upper: 101,  fullBandEquivalentIndex: 0}, // not 100, because the check performed is "x < upper", and x=100 would fail that check
+    {name: "2.1",   lower: 59.5,  upper: 69.5, fullBandEquivalentIndex: 2}, // fullBandEquivalentIndex is the index of GRADE_BANDS_1 that contains the equivalent band. Used in calculation 2.
+    {name: "2.2",   lower: 49.5,  upper: 59.5, fullBandEquivalentIndex: 4},
+    {name: "Third", lower: 44.5,  upper: 49.5, fullBandEquivalentIndex: 6},
+    {name: "Pass",  lower: 39.5,  upper: 44.5, fullBandEquivalentIndex: 8},
+    {name: "Fail",  lower: 0,     upper: 39.5, fullBandEquivalentIndex: 10}
+  ];
+
+  // Return the distribution band that the specified grade falls into.
+  $scope.gradeDistributionBand = function(grade) {
+    for (var i=0; i<$scope.GRADE_BANDS_2.length; i++) {
+      var band = $scope.GRADE_BANDS_2[i];
+      if (grade >= band.lower && grade < band.upper) {
+        return band;
+      }
+    }
+    return null;
+  }
 
   // Calculate the student's degree classification based on the information they have entered.
   $scope.calculateClassification = function() {
@@ -216,16 +236,6 @@ function CalculatorCtrl($scope, localStorageService) {
       {name: "Pass",                  lower: 39.5,  upper: 43.5,  isBorderline: false},
       {name: "Pass/Fail borderline",  lower: 38,    upper: 39.5,  isBorderline: true},
       {name: "Fail",                  lower: 0,     upper: 38,    isBorderline: false}
-    ];
-
-    // Second grade band is used for the grade distribution band
-    var GRADE_BANDS_2 = [
-      {name: "First", lower: 69.5,  upper: 101,  fullBandEquivalentIndex: 0}, // not 100, because the check performed is "x < upper", and x=100 would fail that check
-      {name: "2.1",   lower: 59.5,  upper: 69.5, fullBandEquivalentIndex: 2}, // fullBandEquivalentIndex is the index of GRADE_BANDS_1 that contains the equivalent band. Used in calculation 2.
-      {name: "2.2",   lower: 49.5,  upper: 59.5, fullBandEquivalentIndex: 4},
-      {name: "Third", lower: 44.5,  upper: 49.5, fullBandEquivalentIndex: 6},
-      {name: "Pass",  lower: 39.5,  upper: 44.5, fullBandEquivalentIndex: 8},
-      {name: "Fail",  lower: 0,     upper: 39.5, fullBandEquivalentIndex: 10}
     ];
 
     // Table of conversions between the first and second calculation grade bands, and the outcome band. Taken from the guidance PDF.
@@ -348,8 +358,8 @@ function CalculatorCtrl($scope, localStorageService) {
     // Find the band for the two grades
     var medianBandIndex;
     var higherBandIndex;
-    for (var bandIndex=0; bandIndex<GRADE_BANDS_2.length; bandIndex++) {
-      band = GRADE_BANDS_2[bandIndex];
+    for (var bandIndex=0; bandIndex<$scope.GRADE_BANDS_2.length; bandIndex++) {
+      band = $scope.GRADE_BANDS_2[bandIndex];
       if (medianGrade >= band.lower && medianGrade < band.upper) {
         medianBandIndex = bandIndex;
       }
@@ -362,9 +372,9 @@ function CalculatorCtrl($scope, localStorageService) {
     // the student gets the borderline band.
     var gradeDistributionBandIndex;
     if (medianBandIndex == higherBandIndex) {
-      gradeDistributionBandIndex = GRADE_BANDS_2[medianBandIndex].fullBandEquivalentIndex;
+      gradeDistributionBandIndex = $scope.GRADE_BANDS_2[medianBandIndex].fullBandEquivalentIndex;
     } else {
-      gradeDistributionBandIndex = GRADE_BANDS_2[medianBandIndex].fullBandEquivalentIndex - 1; // -1 gets the borderline band for the band above
+      gradeDistributionBandIndex = $scope.GRADE_BANDS_2[medianBandIndex].fullBandEquivalentIndex - 1; // -1 gets the borderline band for the band above
     }
 
     /* DETERMINE COMBINED CALCULATED DEGREE CLASS
@@ -396,8 +406,8 @@ function CalculatorCtrl($scope, localStorageService) {
         weightedAverageFinalYearGrade /= yearsGrades[yearsGrades.length-1].length;
 
         // Find the band that the average final year grade belongs to
-        for (var i=0; i<GRADE_BANDS_2.length; i++) {
-          var band = GRADE_BANDS_2[i];
+        for (var i=0; i<$scope.GRADE_BANDS_2.length; i++) {
+          var band = $scope.GRADE_BANDS_2[i];
           if (weightedAverageFinalYearGrade >= band.lower && weightedAverageFinalYearGrade < band.upper) {
             finalClassificationBandIndex = band.fullBandEquivalentIndex;
             break;

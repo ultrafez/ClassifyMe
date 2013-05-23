@@ -128,7 +128,7 @@ a {
   font-size: 8pt;
 }
 
-#grade-distribution li span {
+.grade-distribution-grade {
   color: black;
   font-size: 11pt;
   padding-left: 5px;
@@ -137,6 +137,7 @@ a {
 #grade-distribution .description {
   display: none;
   font-size: 9pt;
+  padding-left: 3px;
 }
 
 #grade-distribution .median, #grade-distribution .higher {
@@ -148,6 +149,21 @@ a {
 }
 
 #grade-distribution .higher .higher-description {
+  display: inline;
+}
+
+#grade-distribution .is-past-grade-border {
+  border-top: solid 1px black;
+}
+
+.grade-distribution-band {
+  display: none;
+  color: black;
+  font-size: 8pt;
+  line-height: 12px;
+}
+
+.is-past-grade-border .grade-distribution-band {
   display: inline;
 }
 
