@@ -456,7 +456,7 @@ $(function() {
   $('body').on('mouseenter', '.failed-module', function() {
     $(this).popover('show');
   });
-  $('body').on('mouseleave', '.failed-module', function() {
+  $('body').on('mouseleave', '.module-mark', function() {
     $(this).popover('hide');
   });
 });
