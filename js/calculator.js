@@ -3,8 +3,8 @@ function CalculatorCtrl($scope, localStorageService) {
   var defaultYearData = [
     {"year": 2, "modules": [
       // {"name": "Test Module", "isSingleRow": false, "credits": 10, "assessments": [
-      //   {"name": "Assignment", "weight": 50, "mark": 80},
-      //   {"name": "Exam", "weight": 50, "mark": 74}
+      //   {"name": "Assignment", "weight": 50, "mark": 80, "pending": false}, // pending means that the mark is assumed/guessed/not known yet
+      //   {"name": "Exam", "weight": 50, "mark": 74, "pending": false}
       // ]},
       // {"name": "Test Module 2", "isSingleRow": true, "credits": 10, "assessments": []},
     ]},
@@ -146,7 +146,7 @@ function CalculatorCtrl($scope, localStorageService) {
 
 
   $scope.addModule = function(yearIndex) {
-    $scope.years[yearIndex].modules.push({"name": "", "credits": 10, "isSingleRow": true, "assessments": [{"name": "Whole Module", "weight": 100, "mark": 70}] });
+    $scope.years[yearIndex].modules.push({"name": "", "credits": 10, "isSingleRow": true, "assessments": [{"name": "Whole Module", "weight": 100, "mark": 70, "pending": false}] });
   }
 
   $scope.deleteModule = function(year, moduleIndex) {
@@ -185,7 +185,7 @@ function CalculatorCtrl($scope, localStorageService) {
 
 
   $scope.addAssessment = function(module) {
-    module.assessments.push({"name": "", "weight": "", "mark": ""});
+    module.assessments.push({"name": "", "weight": "", "mark": "", "pending": false});
   }
 
   $scope.duplicateAssessment = function(module, assessmentIndex) {
@@ -194,6 +194,28 @@ function CalculatorCtrl($scope, localStorageService) {
 
   $scope.deleteAssessment = function(module, assessmentIndex) {
     module.assessments.splice(assessmentIndex, 1);
+  }
+
+  // How many assessments within the specified year are pending?
+  $scope.yearPendingAssessmentCount = function(year) {
+    var pendingCount = 0;
+    angular.forEach(year.modules, function(module) {
+      angular.forEach(module.assessments, function(assessment) {
+        if (assessment.pending) {
+          pendingCount++;
+        }
+      });
+    });
+    return pendingCount;
+  }
+
+  // How many pending assessments are there (over all years)?
+  $scope.globalPendingAssessmentCount = function() {
+    var pendingCount = 0;
+    angular.forEach($scope.years, function(year) {
+      pendingCount += $scope.yearPendingAssessmentCount(year);
+    });
+    return pendingCount;
   }
 
 

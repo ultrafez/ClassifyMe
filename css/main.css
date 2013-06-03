@@ -67,6 +67,11 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+/* Hack to stop <small> inside <legend> tag increasing the height of <small> by a few px */
+legend > small {
+  line-height: 100%;
+}
+
 /* General styles */
 
 a {
@@ -90,6 +95,10 @@ a {
 
 .assessments {
   margin-bottom: 0;
+}
+
+.pending-checkbox {
+  margin-right: 10px;
 }
 
 .year {
