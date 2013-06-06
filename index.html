@@ -47,6 +47,14 @@
   </script>
 </head>
 <body>
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
   <div id="wrap">
     <div class="container" ng-controller="CalculatorCtrl">
       <div class="page-header">
@@ -217,6 +225,18 @@
           <div ng-show="classification==null">
             <p>Please fully complete the form above to calculate your final classification.</p>
           </div>
+        </section>
+
+        <hr />
+
+        <section>
+          <p>If you found this tool useful, please consider sharing it so your friends can use it too.</p>
+          <div class="twitter-share">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.alexsilcock.net/projects/classifyme/" data-text="Calculate your final University of Sheffield degree classification based on your module grades." data-via="ultrafez" data-count="none">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          </div>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=http://www.alexsilcock.net/projects/classifyme/" target="_blank" class="facebook-share"><i class="fb-icon"></i> Share on Facebook</a>
+          <div class="fb-like" data-href="http://www.alexsilcock.net/projects/classifyme/" data-send="false" data-width="450" data-show-faces="true"></div>
         </section>
       </div>
     </div>

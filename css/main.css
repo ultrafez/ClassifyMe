@@ -192,6 +192,40 @@ a {
   display: inline;
 }
 
+.twitter-share {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* styling ripped from Facebook's Like button so it matches, since Facebook want to deprecate the Share button */
+.facebook-share {
+  background: #eceef5;
+  -webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;
+  border: 1px solid #cad4e7;
+  cursor: pointer;
+  padding: 5px 6px 3px;
+  white-space: nowrap;
+  vertical-align: top;
+  display: inline-block;
+  color: #3b5998;
+  font-size: 11px;
+  font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+  line-height: 100%;
+}
+
+.facebook-share:hover {
+  text-decoration: none;
+  border-color: #9dacce;
+}
+
+.fb-icon {
+  background-image: url(https://fbstatic-a.akamaihd.net/rsrc.php/v2/y-/r/tbhIfdAHjXE.png);
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  margin-top: -1px;
+}
+
 section:last-child {
   margin-bottom: 50px;
 }
