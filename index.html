@@ -1,23 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" ng-app="LocalStorageModule">
 <head>
   <meta charset="utf8">
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <title>ClassifyMe - University of Sheffield degree classification calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Search engines -->
   <meta name="description" content="Calculate your final University of Sheffield degree classification by entering your module results.">
   <meta name="author" content="Alex Silcock">
-  <link rel="canonical" href="http://www.alexsilcock.net/projects/classifyme/" />
+  <link rel="canonical" href="http://www.alexsilcock.net/projects/classifyme/">
   
   <!-- Facebook Open Graph -->
-  <meta property="og:title" content="ClassifyMe - University of Sheffield degree classification calculator" />
-  <meta property="og:type" content="website" />
-  <meta property="og:description" content="Calculate your final University of Sheffield degree classification by entering your module results." />
-  <meta property="og:url" content="http://www.alexsilcock.net/projects/classifyme/" />
+  <meta property="og:title" content="ClassifyMe - University of Sheffield degree classification calculator">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="Calculate your final University of Sheffield degree classification by entering your module results.">
+  <meta property="og:url" content="http://www.alexsilcock.net/projects/classifyme/">
 
   <!-- Facebook analytics -->
-  <meta property="fb:admins" content="691339327" />
+  <meta property="fb:admins" content="691339327">
 
   <!-- Styling -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -74,57 +75,61 @@
         This calculator was written based on the <a href="http://www.shef.ac.uk/polopoly_fs/1.109994!/file/LeTS-guidance-new-methodology.pdf" target="_blank">"Degree Classification" guidelines</a> for Bachelor's degrees, which are published by the University. This calculator uses a weighting scheme where credits are worth double in Level 3 and Level 4, which is the case for most standard degrees - check with your department to be sure. While this tool has been tested, the author takes no responsibility for any inaccuracies in calculations.
       </p>
 
-      <button class="btn btn-success btn-large" ng-hide="hasStarted" ng-click="begin()"><i class="icon-arrow-right"></i> Begin</button>
+      <button class="btn btn-success btn-lg" ng-hide="hasStarted" ng-click="begin()"><i class="glyphicon glyphicon-arrow-right"></i> Begin</button>
       
-      <hr />
+      <hr>
       
       <div ng-class="{'blur': !hasStarted}">
         
         <section>
           <h2>1. How long is your degree?</h2>
-          <label for="numYears3" class="radio">
-            <input type="radio" name="numYears" value="3" id="numYears3" checked ng-model="degreeLength" />3 years
-          </label>
-          <label for="numYears4" class="radio">
-            <input type="radio" name="numYears" value="4" id="numYears4" ng-model="degreeLength" />4 years (integrated Master's)
-          </label>
+          <div class="checkbox">
+            <label for="numYears3" class="">
+              <input type="radio" name="numYears" value="3" id="numYears3" checked="" ng-model="degreeLength">3 years
+            </label>
+          </div>
+          <div class="checkbox">
+            <label for="numYears4" class="">
+              <input type="radio" name="numYears" value="4" id="numYears4" ng-model="degreeLength">4 years (integrated Master's)
+            </label>
+          </div>
         </section>
         
-        <hr />
+        <hr>
         
         <section>
-          <button class="btn btn-small pull-right" ng-click="resetData()">Reset</button>
+          <button class="btn pull-right btn-default btn-sm" ng-click="resetData()">Reset</button>
           <h2>2. Enter module results</h2>
         
           <p>Your module results from previous academic years are available <a href="https://www.shef.ac.uk/exam-results/LDP/previous.html" target="_blank">on the University website</a>.</p>
         
-          <ul class="unstyled">
+          <ul class="list-unstyled">
             <li ng-repeat="year in years">
               <fieldset class="year">
-                <legend>Year {{year.year}} <small ng-show="yearPendingAssessmentCount(year) > 0">{{yearPendingAssessmentCount(year)}} pending assessment<span ng-show="yearPendingAssessmentCount(year) > 1">s</span></small><span class="pull-right" ng-show="totalCredits(year) == 120">Overall {{ yearMark(year) | number:1 }}%</span></legend>
+                <legend>Year {{year.year}} <small ng-show="yearPendingAssessmentCount(year) &gt; 0">{{yearPendingAssessmentCount(year)}} pending assessment<span ng-show="yearPendingAssessmentCount(year) &gt; 1">s</span></small><span class="pull-right" ng-show="totalCredits(year) == 120">Overall {{ yearMark(year) | number:1 }}%</span></legend>
         
                 <div class="alert alert-info" ng-show="$index==years.length-1">
                   <strong>Don't know all of your module results?</strong> You can click "Add Assessments" for a module to enter your individual assignment/exam marks that you already know, and estimate how well you think you'll do at the rest.
                 </div>
         
-                <div class="module well well-small" ng-repeat="module in year.modules">
+                <div class="module well well-sm" ng-repeat="module in year.modules">
                   <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
-                    <input type="text" class="module-name" ng-model="module.name" placeholder="Module name/code (optional)" />
+                    <input type="text" class="module-name form-control" ng-model="module.name" placeholder="Module name/code (optional)">
                     <div class="input-append" title="Credits must be multiples of 5">
-                      <input type="number" min="0" max="120" required ng-model="module.credits" ng-pattern="creditsRegex" class="input-supermini" />
+                      <input type="number" min="0" max="120" required="" ng-model="module.credits" ng-pattern="creditsRegex" class="input-supermini form-control">
                       <span class="add-on">credits</span>
                     </div>
-                    <span class="input-append module-mark" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark < 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
-                      <input type="number" class="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark" ng-pattern="integerRegex">
+                    <span class="input-append module-mark" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark &lt; 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
+                      <input type="number" class="input-supermini form-control" min="0" max="100" required="" ng-model="module.assessments[0].mark" ng-pattern="integerRegex">
                       <span class="add-on">% mark</span>
                     </span>
-                    <span class="input-append module-mark" ng-hide="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark < 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
-                      <input type="text" class="input-supermini" disabled value="{{moduleMark(module)}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage." />
+                    <span class="input-append module-mark" ng-hide="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark &lt; 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
+                      <input type="text" class="input-supermini form-control" disabled="" value="{{moduleMark(module)}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage.">
                       <span class="add-on">% mark</span>
                     </span>
                     <span class="pull-right">
-                      <button ng-click="convertToMultiple(module)" class="btn btn-info btn-small" ng-show="module.isSingleRow">Add Assessments...</button>
-                      <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-small"><i class="icon-trash icon-white"></i> Remove module</button>
+                      <button ng-click="convertToMultiple(module)" class="btn btn-info btn-sm" ng-show="module.isSingleRow">Add Assessments...</button>
+                      <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash glyphicon-white"></i> Remove module</button>
                     </span>
                   </div>
                   <table class="table table-striped assessments" ng-hide="module.isSingleRow">
@@ -139,7 +144,7 @@
                     <tfoot>
                       <tr>
                         <td colspan="4">
-                          <button class="btn btn-small" ng-click="addAssessment(module)"><i class="icon-plus"></i> Add assessment</button>
+                          <button class="btn btn-default btn-sm" ng-click="addAssessment(module)"><i class="glyphicon glyphicon-plus"></i> Add assessment</button>
                           <span class="text-error" ng-show="totalWeight(module)!=100">Assessment weights don't add up to 100%</span>
                         </td>
                       </tr>
@@ -147,27 +152,29 @@
                     <tbody>
                       <tr ng-repeat="assessment in module.assessments" ng-class="{'info': assessment.pending}">
                         <td class="span5">
-                          <input type="text" ng-model="assessment.name" class="input-block-level" placeholder="e.g. Exam" />
+                          <input type="text" ng-model="assessment.name" class="form-control" placeholder="e.g. Exam">
                         </td>
                         <td class="span2">
-                          <div class="input-append input-block-level">
-                            <input type="number" min="0" max="100" step="any" required class="input-block-level" ng-model="assessment.weight" />
+                          <div class="input-append">
+                            <input type="number" min="0" max="100" step="any" required="" class="form-control" ng-model="assessment.weight">
                             <span class="add-on">%</span>
                           </div>
                         </td>
                         <td class="span2">
-                          <div class="input-append input-block-level">
-                            <input type="number" min="0" max="100" step="any" required class="input-block-level" ng-model="assessment.mark" />
+                          <div class="input-append">
+                            <input type="number" min="0" max="100" step="any" required="" class="form-control" ng-model="assessment.mark">
                             <span class="add-on">%</span>
                           </div>
                         </td>
                         <td class="span3 form-inline">
                           <div class="pull-right">
-                            <label class="checkbox pending-checkbox" title="Highlights the assessment so you can find it easily later, when you know the final mark for it. This doesn't affect the classification calculation.">
-                              <input type="checkbox" ng-model="assessment.pending" /> Pending Grade
-                            </label>
-                            <button class="btn btn-small" title="Duplicate this assessment" ng-click="duplicateAssessment(module, $index)"><i class="icon-copy"></i></button>
-                            <button class="btn btn-danger btn-small" title="Delete this assessment" ng-click="deleteAssessment(module, $index)"><i class="icon-trash icon-white"></i></button>
+                            <div class="checkbox">
+                              <label class="pending-checkbox" title="Highlights the assessment so you can find it easily later, when you know the final mark for it. This doesn't affect the classification calculation.">
+                              <input type="checkbox" ng-model="assessment.pending"> Pending Grade
+                              </label>
+                            </div>
+                            <button class="btn btn-default btn-sm" title="Duplicate this assessment" ng-click="duplicateAssessment(module, $index)"><i class="icon-copy"></i></button>
+                            <button class="btn btn-danger btn-sm" title="Delete this assessment" ng-click="deleteAssessment(module, $index)"><i class="glyphicon glyphicon-trash icon-white"></i></button>
                           </div>
                         </td>
                       </tr>
@@ -175,20 +182,20 @@
                   </table>
                 </div>
         
-                <div ng-show="creditsNeeded(year) > 0">
-                  <button class="btn btn-primary" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
+                <div ng-show="creditsNeeded(year) &gt; 0">
+                  <button class="btn btn-primary" ng-click="addModule($index)"><i class="glyphicon glyphicon-plus"></i> Add module</button>
                   <span class="text-error">You need to add modules worth an extra {{creditsNeeded(year)}} credits to this year to reach the full 120 credits.</span>
                 </div>
                 <div>
-                  <button ng-show="creditsNeeded(year) <= 0" class="btn" ng-click="addModule($index)"><i class="icon-plus"></i> Add module</button>
-                  <span class="text-error" ng-show="creditsOver(year) > 0">Your modules total {{totalCredits(year)}} credits for this year; remove {{creditsOver(year)}} credits worth of modules to get to a total of 120 credits.</span>
+                  <button ng-show="creditsNeeded(year) &lt;= 0" class="btn btn-default" ng-click="addModule($index)"><i class="glyphicon glyphicon-plus"></i> Add module</button>
+                  <span class="text-error" ng-show="creditsOver(year) &gt; 0">Your modules total {{totalCredits(year)}} credits for this year; remove {{creditsOver(year)}} credits worth of modules to get to a total of 120 credits.</span>
                 </div>
               </fieldset>
             </li>
           </ul>
         </section>
         
-        <hr />
+        <hr>
         
         <section>
           <h2>3. Calculate classification</h2>
@@ -206,7 +213,7 @@
                 </p>
                 <p>This final classification is calculated from the combination of your module weighted average score of {{ classification.weightedAverageGrade | number:1 }}%, which corresponds to the band {{ classification.weightedAverageGradeBand.name }}, and your grade distribution band of {{ classification.gradeDistributionBand.name }}.</p>
               </div>
-              <p ng-show="globalPendingAssessmentCount() > 0">This classification includes grades from {{globalPendingAssessmentCount()}} <abbr data-placement="top" data-trigger="hover" data-content="Pending assessments are assessments that you have estimated the grade for. They are highlighted in blue in the list above for easy recognition." class="js-activate-popover">pending assessment<span ng-show="globalPendingAssessmentCount() > 1">s</span></abbr>. Enter the final grade (when known) for the pending assessment<span ng-show="globalPendingAssessmentCount() > 1">s</span> for a more accurate classification.</p>
+              <p ng-show="globalPendingAssessmentCount() &gt; 0">This classification includes grades from {{globalPendingAssessmentCount()}} <abbr data-placement="top" data-trigger="hover" data-content="Pending assessments are assessments that you have estimated the grade for. They are highlighted in blue in the list above for easy recognition." class="js-activate-popover">pending assessment<span ng-show="globalPendingAssessmentCount() &gt; 1">s</span></abbr>. Enter the final grade (when known) for the pending assessment<span ng-show="globalPendingAssessmentCount() &gt; 1">s</span> for a more accurate classification.</p>
               <p>
                 <a href="" data-toggle="collapse" data-target="#grade-distribution">Show grade distribution</a>
               </p>
@@ -216,7 +223,7 @@
                 <ol>
                   <li ng-repeat="grade in classification.allGrades" ng-class="{'is-past-grade-border': gradeDistributionBand(grade).name != gradeDistributionBand(classification.allGrades[$index-1]).name}">
                     <span class="pull-right grade-distribution-band">{{gradeDistributionBand(grade).name}}</span>
-                    <span class="grade-distribution-grade" ng-class="{'median': $index==medianIndex, 'higher': $index==higherIndex}">{{grade}}<span class="median-description description js-activate-popover" data-container="body" data-placement="top" data-trigger="hover" data-content="This grade determines your grade distribution band, subject to the borderline check."><i class="icon-double-angle-left"></i> Median</span><span class="higher-description description js-activate-popover" data-container="body" data-placement="top" data-trigger="hover" data-content="If this grade is in a higher band than the median grade, then your grade distribution band is borderline with the band above the median one."><i class="icon-double-angle-left"></i> Borderline</span></li>
+                    <span class="grade-distribution-grade" ng-class="{'median': $index==medianIndex, 'higher': $index==higherIndex}">{{grade}}<span class="median-description description js-activate-popover" data-container="body" data-placement="top" data-trigger="hover" data-content="This grade determines your grade distribution band, subject to the borderline check.">&laquo; Median</span><span class="higher-description description js-activate-popover" data-container="body" data-placement="top" data-trigger="hover" data-content="If this grade is in a higher band than the median grade, then your grade distribution band is borderline with the band above the median one.">&laquo; Borderline</span></span></li>
                 </ol>
               </div>
             </div>
@@ -227,7 +234,7 @@
           </div>
         </section>
 
-        <hr />
+        <hr>
 
         <section>
           <p>If you found this tool useful, please consider sharing it so your friends can use it too.</p>
@@ -245,7 +252,7 @@
 
   <div id="footer">
     <div class="container">
-      <p class="muted credit">A weekend project by <a href="http://www.alexsilcock.net">Alex Silcock</a>, using <a href="http://angularjs.org">AngularJS</a>. <a href="https://github.com/ultrafez/ClassifyMe">View on GitHub</a>. Copyright &copy; 2013</p>
+      <p class="credit text-muted">A weekend project by <a href="http://www.alexsilcock.net">Alex Silcock</a>, using <a href="http://angularjs.org">AngularJS</a>. <a href="https://github.com/ultrafez/ClassifyMe">View on GitHub</a>. Copyright © 2013</p>
     </div>
   </div>
 </body>
