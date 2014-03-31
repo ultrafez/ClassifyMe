@@ -113,24 +113,32 @@
                 </div>
         
                 <div class="module well well-sm" ng-repeat="module in year.modules">
-                  <div class="controls-row" ng-class="{'single-row': module.isSingleRow}">
-                    <input type="text" class="module-name form-control" ng-model="module.name" placeholder="Module name/code (optional)">
-                    <div class="input-append" title="Credits must be multiples of 5">
-                      <input type="number" min="0" max="120" required="" ng-model="module.credits" ng-pattern="creditsRegex" class="input-supermini form-control">
-                      <span class="add-on">credits</span>
+                  <div class="row" ng-class="{'single-row': module.isSingleRow}">
+                    <div class="col-md-4">
+                      <input type="text" class="module-name form-control" ng-model="module.name" placeholder="Module name/code (optional)">
                     </div>
-                    <span class="input-append module-mark" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark &lt; 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
-                      <input type="number" class="input-supermini form-control" min="0" max="100" required="" ng-model="module.assessments[0].mark" ng-pattern="integerRegex">
-                      <span class="add-on">% mark</span>
-                    </span>
-                    <span class="input-append module-mark" ng-hide="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark &lt; 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
-                      <input type="text" class="input-supermini form-control" disabled="" value="{{moduleMark(module)}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage.">
-                      <span class="add-on">% mark</span>
-                    </span>
-                    <span class="pull-right">
-                      <button ng-click="convertToMultiple(module)" class="btn btn-info btn-sm" ng-show="module.isSingleRow">Add Assessments...</button>
-                      <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"></i> Remove module</button>
-                    </span>
+                    <div class="col-md-3">
+                      <div class="input-group" title="Credits must be multiples of 5">
+                        <input type="number" min="0" max="120" required="" ng-model="module.credits" ng-pattern="creditsRegex" class="form-control">
+                        <span class="input-group-addon">credits</span>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="input-group" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark &lt; 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
+                        <input type="number" class="form-control" min="0" max="100" required="" ng-model="module.assessments[0].mark" ng-pattern="integerRegex">
+                        <span class="input-group-addon">% mark</span>
+                      </div>
+                      <div class="input-group" ng-hide="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark &lt; 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
+                        <input type="text" class="form-control" disabled="" value="{{moduleMark(module)}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage.">
+                        <span class="input-group-addon">% mark</span>
+                      </div>
+                    </div>
+                    <div class="col-md-1">
+                      <button ng-click="convertToMultiple(module)" class="btn btn-info btn-sm btn-block" ng-show="module.isSingleRow">Add Assessments...</button>
+                    </div>
+                    <div class="col-md-1">
+                      <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-sm btn-block"><i class="glyphicon glyphicon-trash"></i> Remove module</button>
+                    </div>
                   </div>
                   <table class="table table-striped assessments" ng-hide="module.isSingleRow">
                     <thead>

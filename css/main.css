@@ -11,14 +11,6 @@ html, body {
 
 /* Input styles */
 
-td.span2 .input-block-level input {
-  width: 109px;
-}
-
-.input-supermini {
-  width: 30px;
-}
-
 input:invalid, input.ng-invalid {
   border-color: #e9322d;
 }
@@ -111,7 +103,6 @@ a {
 
 .module-name {
   font-weight: bold;
-  width: 380px;
 }
 
 .classification {
@@ -239,4 +230,14 @@ section:last-child {
 
 .credit {
   margin: 20px 0;
+}
+
+/* Bootstrap weirdness fixes */
+.input-group[class*=col-] {
+  float: left;
+}
+
+.input-group[class*=col-] + .input-group[class*=col] {
+  padding-left: 15px; /* TODO make this responsive */
+  float: left;
 }
