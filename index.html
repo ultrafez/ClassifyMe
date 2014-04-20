@@ -117,13 +117,13 @@
                     <div class="col-md-4">
                       <input type="text" class="module-name form-control" ng-model="module.name" placeholder="Module name/code (optional)">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <div class="input-group" title="Credits must be multiples of 5">
                         <input type="number" min="0" max="120" required="" ng-model="module.credits" ng-pattern="creditsRegex" class="form-control">
                         <span class="input-group-addon">credits</span>
                       </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <div class="input-group" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark &lt; 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
                         <input type="number" class="form-control" min="0" max="100" required="" ng-model="module.assessments[0].mark" ng-pattern="integerRegex">
                         <span class="input-group-addon">% mark</span>
@@ -133,20 +133,20 @@
                         <span class="input-group-addon">% mark</span>
                       </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                       <button ng-click="convertToMultiple(module)" class="btn btn-info btn-sm btn-block" ng-show="module.isSingleRow">Add Assessments...</button>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                       <button ng-click="deleteModule(year, $index)" class="btn btn-danger btn-sm btn-block"><i class="glyphicon glyphicon-trash"></i> Remove module</button>
                     </div>
                   </div>
                   <table class="table table-striped assessments" ng-hide="module.isSingleRow">
                     <thead>
                       <tr>
-                        <th class="span5">Assessment Name</th>
-                        <th class="span2"><abbr title="What percentage of this module is each assessment worth?">Weighting</abbr></th>
-                        <th class="span2">Your Mark</th>
-                        <th class="span3"></th>
+                        <th class="col-md-5">Assessment Name</th>
+                        <th class="col-md-2"><abbr title="What percentage of this module is each assessment worth?">Weighting</abbr></th>
+                        <th class="col-md-2">Your Mark</th>
+                        <th class="col-md-3"></th>
                       </tr>
                     </thead>
                     <tfoot>
@@ -159,22 +159,22 @@
                     </tfoot>
                     <tbody>
                       <tr ng-repeat="assessment in module.assessments" ng-class="{'info': assessment.pending}">
-                        <td class="span5">
+                        <td class="col-md-5">
                           <input type="text" ng-model="assessment.name" class="form-control" placeholder="e.g. Exam">
                         </td>
-                        <td class="span2">
-                          <div class="input-append">
+                        <td class="col-md-2">
+                          <div class="input-group">
                             <input type="number" min="0" max="100" step="any" required="" class="form-control" ng-model="assessment.weight">
-                            <span class="add-on">%</span>
+                            <span class="input-group-addon">%</span>
                           </div>
                         </td>
-                        <td class="span2">
-                          <div class="input-append">
+                        <td class="col-md-2">
+                          <div class="input-group">
                             <input type="number" min="0" max="100" step="any" required="" class="form-control" ng-model="assessment.mark">
-                            <span class="add-on">%</span>
+                            <span class="input-group-addon">%</span>
                           </div>
                         </td>
-                        <td class="span3 form-inline">
+                        <td class="col-md-3 form-inline">
                           <div class="pull-right">
                             <div class="checkbox">
                               <label class="pending-checkbox" title="Highlights the assessment so you can find it easily later, when you know the final mark for it. This doesn't affect the classification calculation.">
