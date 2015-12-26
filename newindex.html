@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="LocalStorageModule">
+<head>
+  <meta charset="utf8">
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClassifyMe - University of Sheffield degree classification calculator</title>
+
+  <!-- Search engines -->
+  <meta name="description" content="Calculate your final University of Sheffield degree classification by entering your module results.">
+  <meta name="author" content="Alex Silcock">
+  <link rel="canonical" href="http://www.alexsilcock.net/projects/classifyme/" />
+  
+  <!-- Facebook Open Graph -->
+  <meta property="og:title" content="ClassifyMe - University of Sheffield degree classification calculator" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Calculate your final University of Sheffield degree classification by entering your module results." />
+  <meta property="og:url" content="http://www.alexsilcock.net/projects/classifyme/" />
+
+  <!-- Facebook analytics -->
+  <meta property="fb:admins" content="691339327" />
+
+  <!-- Styling -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Scripts -->
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script src="js/localStorageModule.js"></script>
+  <script src="js/calculator.js"></script>
+
+  <style type="text/css">
+    /* TODO: tidy this lot up */
+
+    /* to make labels in module headers align properly */
+    .panel-heading .label {
+      font-size: 13px;
+      vertical-align: text-top;
+    }
+
+    .module-edit-btn {
+      margin-top: -6px;
+      padding: 4px 12px;
+    }
+  </style>
+
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-2011409-3', 'auto', {'allowLinker': true});
+    ga('require', 'linker');
+    ga('linker:autoLink', ['alexsilcock.net']);
+    ga('send', 'pageview');
+
+  </script>
+  <!-- End Google Analytics -->
+</head>
+<body>
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="container">
+    <div class="row">
+      <div class="page-header">
+        <h1>ClassifyMe <small>University of Sheffield degree classification calculator</small></h1>
+      </div>
+
+      <p>Some guff here</p>
+
+      <hr />
+
+      <section>
+        <h2>1. How long is your degree?</h2>
+
+        <div class="radio">
+          <label>
+            <input type="radio" name="numYears" id="numYears3" value="option1" checked>
+            3 years
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="numYears" id="numYears3" value="option1" checked>
+            4 years (integrated Master's)
+          </label>
+        </div>
+      </section>
+
+      <hr />
+
+      <section>
+        <h2>2. Enter module results</h2>
+
+        <fieldset>
+          <legend>
+            Year 2
+            <span class="pull-right">Overall 55.0%</span>
+          </legend>
+          <p>Don't know what mark to expect? Add assessments you've done so far instead.</p>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="form-group">
+                <label for="moduleName1">Module name</label>
+                <input type="text" class="form-control" id="moduleName1" placeholder="e.g. Fundamentals of Badger Wrangling">
+              </div>
+              <div class="form-group">
+                <label for="credits1">Credits</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="credits1" placeholder="e.g. 20" aria-describedby="credits-append">
+                  <span class="input-group-addon" id="credits-append">credits</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="mark1">Mark achieved/expected</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="e.g. 70" aria-describedby="percent-append">
+                  <span class="input-group-addon" id="percent-append">%</span>
+                </div>
+              </div>
+              <button class="btn btn-primary">Finish editing</button> <button class="btn btn-info">Add assessments...</button>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="pull-right">
+                <span class="label label-info">20cr</span>
+                <span class="label label-primary">70%</span>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default module-edit-btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="glyphicon glyphicon-cog"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a href="#">Edit...</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Delete...</a></li>
+                  </ul>
+                </div>
+              </div>
+              <h3 class="panel-title">New module</h3>
+            </div>
+            <!-- <div class="panel-body">
+              Data and stuff
+            </div> -->
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="pull-right">
+                <span class="label label-info">20cr</span>
+                <span class="label label-primary">70%</span>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default module-edit-btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="glyphicon glyphicon-cog"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a href="#">Edit...</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Delete...</a></li>
+                  </ul>
+                </div>
+              </div>
+              <h3 class="panel-title">New module</h3>
+            </div>
+            <!-- <div class="panel-body"> -->
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th class="col-xs-5">Assessment</th>
+                    <th class="col-xs-3">Weighting</th>
+                    <th class="col-xs-4" colspan="2">Mark</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="col-xs-">Exam</td>
+                    <td class="col-xs-">30%</td>
+                    <td class="col-xs-">65%</td>
+                    <td class="col-xs-"><button class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></button></td>
+                  </tr>
+                </tbody>
+              </table>
+            <!-- </div> -->
+          </div>
+        </fieldset>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
