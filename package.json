@@ -1,0 +1,25 @@
+{
+  "name": "ClassifyMe",
+  "version": "0.0.0",
+  "description": "Degree classification calculator for University of Sheffield",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Silcock",
+  "license": "proprietary",
+  "private": true,
+  "dependencies": {
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-transform-object-assign": "^6.1.18",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "flux": "^2.1.1",
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.7",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "webpack": "^1.12.8"
+  }
+}

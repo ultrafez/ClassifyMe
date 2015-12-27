@@ -7,6 +7,18 @@ It is based on the degree classification calculation procedure described on [the
 
 Use this calculator on [my website](http://www.alexsilcock.net/projects/classifyme/).
 
+## Tech stack
+
+Basics:
+
+* React
+* Flux
+* ES6 (via Babel)
+* Gulp
+* Webpack
+
+User data is stored locally using LocalStorage. Styling is provided by Bootstrap 2.3.2.
+
 ## License
 
 Copyright Alex Silcock. All rights reserved. Contact me for usage - Twitter @ultrafez, or email website -at- alexsilcock.net
