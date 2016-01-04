@@ -3,20 +3,19 @@
 
 import CalcActions from './actions/CalcActions';
 import CalcStore from './stores/CalcStore';
+import MainForm from './components/MainForm.jsx';
 
 function getState() {
-    let {aNumber} = CalcStore.getState();
     return {
-        aNumber: aNumber,
+        years: CalcStore.getYears(),
     };
 }
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = Object.assign({
-
-        }, getState());
+        this.state = getState();
+        this.showStore = false;
 
         this._onStoreUpdateBound = this._onStoreUpdate.bind(this);
     }
@@ -33,20 +32,27 @@ class App extends React.Component {
         CalcStore.removeChangeListener(this._onStoreUpdateBound);
     }
 
-    incr() {
-        CalcActions.add();
-    }
-
-    decr() {
-        CalcActions.remove();
+    toggleStore() {
+        this.showStore = !this.showStore;
+        this.forceUpdate();
     }
 
     render() {
         return (
             <div>
-                <span>{this.state.aNumber}</span>
-                <button className="btn btn-default" onClick={this.incr}>Incr</button>
-                <button className="btn btn-default" onClick={this.decr}>Decr</button>
+                <button onClick={CalcActions.resetApp}>Reset App</button>
+                <MainForm years={this.state.years} />
+                <hr style={{borderTopColor: 'red'}} />
+
+                <div style={{position: 'fixed', top: 0, left: 0, bottom: 0, overflow: 'auto'}}>
+                    <button onClick={this.toggleStore.bind(this)}>Toggle Store</button>
+                    {this.showStore ?
+                        <pre>
+                            {JSON.stringify(this.state.years, null, 2)}
+                        </pre>
+                        : null
+                    }
+                </div>
             </div>
         );
     }
