@@ -24,6 +24,7 @@
     "react": "^0.14.3",
     "react-addons-update": "^0.14.3",
     "react-dom": "^0.14.3",
-    "webpack": "^1.12.8"
+    "webpack": "^1.12.8",
+    "webpack-dev-server": "^1.14.0"
   }
 }

@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var webpackConfig = require('../webpack.config.js');
 var webpack = require('webpack');
 var gutil = require('gulp-util');
+var WebpackDevServer = require('webpack-dev-server');
 
 var paths = [
     'assets/js/**/*'
@@ -49,5 +50,24 @@ module.exports = function () {
 
             callback();
         });
+    });
+
+    gulp.task('webpack:dev-server', function (callback) {
+        var dsConfig = Object.create(webpackConfig);
+        dsConfig.devtool = 'inline-source-map';
+        dsConfig.debug = true;
+        dsConfig.entry.unshift('webpack-dev-server/client?http://localhost:8080');
+
+        var myWebpack = webpack(dsConfig);
+
+        new WebpackDevServer(myWebpack, {
+            publicPath: '/public' + dsConfig.output.publicPath,
+            stats: {
+                colors: true,
+            },
+        }).listen(8080, 'localhost', function(err) {
+            if (err) throw new gutil.PluginError('webpack-dev-server', err);
+            gutil.log('[webpack-dev-server]', 'listening');
+        })
     });
 }
