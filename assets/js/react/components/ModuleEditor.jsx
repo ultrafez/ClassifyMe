@@ -1,5 +1,6 @@
 import CalcActions from '../actions/CalcActions';
 import InputPatternRestrictor from './InputPatternRestrictor.jsx';
+import AssessmentEditor from './AssessmentEditor.jsx';
 import classNames from 'classnames';
 
 class ModuleEditor extends React.Component {
@@ -98,6 +99,39 @@ class ModuleEditor extends React.Component {
                         }
                         <button onClick={this.deleteModule.bind(this)} className="btn btn-danger btn-small"><i className="icon-trash icon-white"></i> Remove module</button>
                     </span>
+                    {!this.props.isSingleRow ?
+                        <table className="table table-striped assessments">
+                            <thead>
+                                <tr>
+                                    <th className="span5">Assessment Name</th>
+                                    <th className="span2">
+                                        <abbr title="What percentage of this module is each assessment worth?">Weighting</abbr>
+                                    </th>
+                                    <th className="span2">Your Mark</th>
+                                    <th className="span3"></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td colSpan="4">
+                                        <p>TODO insert Add Assessment button here</p>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {this.props.assessments.map((ass, idx) => (
+                                    <AssessmentEditor
+                                        key={idx}
+                                        year={this.props.year}
+                                        moduleIndex={this.props.moduleIndex}
+                                        assessmentIndex={idx}
+                                        {...ass}
+                                        />
+                                ))}
+                            </tbody>
+                        </table>
+                        : null
+                    }
                 </div>
             </div>
         );
