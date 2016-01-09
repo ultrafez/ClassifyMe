@@ -42,6 +42,28 @@ const CalcActions = {
                 credits,
             },
         })
+    },
+
+    setModuleMark(year, moduleIndex, mark) {
+        AppDispatcher.dispatch({
+            type: CalcConstants.SET_ASSESSMENT_MARK,
+            payload: {
+                year,
+                moduleIndex,
+                assessmentIndex: 0,
+                mark,
+            },
+        })
+    },
+
+    deleteModule(year, moduleIndex) {
+        AppDispatcher.dispatch({
+            type: CalcConstants.DELETE_MODULE,
+            payload: {
+                year,
+                moduleIndex,
+            },
+        });
     }
 }
 

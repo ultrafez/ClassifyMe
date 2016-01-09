@@ -103,6 +103,38 @@ csi.dispatchToken = AppDispatcher.register(action => {
             });
             break;
 
+        case CalcConstants.SET_ASSESSMENT_MARK:
+            csi.state = update(csi.state, {
+                years: {
+                    [action.payload.year-2]: {
+                        modules: {
+                            [action.payload.moduleIndex]: {
+                                assessments: {
+                                    [action.payload.assessmentIndex]: {
+                                        mark: {
+                                            $set: action.payload.mark,
+                                        },
+                                    },
+                                },
+                            },
+                        }
+                    },
+                },
+            });
+            break;
+
+        case CalcConstants.DELETE_MODULE:
+            csi.state = update(csi.state, {
+                years: {
+                    [action.payload.year-2]: {
+                        modules: {
+                            $splice: [[action.payload.moduleIndex, 1]]
+                        },
+                    },
+                },
+            });
+            break;
+
         default:
             console.log('u wot?', action.type);
     }

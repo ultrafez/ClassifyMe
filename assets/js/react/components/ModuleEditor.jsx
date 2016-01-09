@@ -11,10 +11,29 @@ class ModuleEditor extends React.Component {
         CalcActions.setModuleCredits(this.props.year, this.props.moduleIndex, parseInt(e.target.value, 10));
     }
 
+    updateMark(e) {
+        CalcActions.setModuleMark(this.props.year, this.props.moduleIndex, e.target.value);
+    }
+
+    deleteModule() {
+        CalcActions.deleteModule(this.props.year, this.props.moduleIndex);
+    }
+
+    getModuleMark() {
+        // TODO: return module mark
+        return 3.14;
+    }
+
     render() {
         let controlsStyles = classNames({
             'controls-row': true,
             'single-row': this.props.isSingleRow,
+        });
+
+        let markStyles = classNames({
+            'input-append': true,
+            'module-mark': true,
+            'failed-module': this.props.assessments[0].mark < 40
         });
 
         return (
@@ -41,17 +60,36 @@ class ModuleEditor extends React.Component {
                         </InputPatternRestrictor>
                         <span className="add-on">credits</span>
                     </div>
-                    <span className="input-append module-mark" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark < 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
-                        <input type="number" className="input-supermini" min="0" max="100" required ng-model="module.assessments[0].mark" ng-pattern="integerRegex" />
-                        <span className="add-on">% mark</span>
-                    </span>
-                    <span className="input-append module-mark" ng-hide="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark < 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
-                        <input type="text" className="input-supermini" disabled value="{{moduleMark(module)}}" title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage." />
-                        <span className="add-on">% mark</span>
-                    </span>
+                    {this.props.isSingleRow ?
+                        <span className={markStyles} data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
+                            <InputPatternRestrictor onChange={this.updateMark.bind(this)} value={this.props.assessments[0].mark}>
+                                <input
+                                    type="number"
+                                    className="input-supermini"
+                                    min="0"
+                                    max="100"
+                                    step="1"
+                                    required
+                                    pattern="^\d+$"
+                                    />
+                            </InputPatternRestrictor>
+                            <span className="add-on">% mark</span>
+                        </span>
+                        :
+                        <span className={markStyles} data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
+                            <input
+                                type="text"
+                                className="input-supermini"
+                                disabled
+                                value={this.getModuleMark()}
+                                title="The mark for this module is calculated from the assessments that you enter below. Changing the marks for those assessments will update this overall percentage."
+                                />
+                            <span className="add-on">% mark</span>
+                        </span>
+                    }
                     <span className="pull-right">
                         <button ng-click="convertToMultiple(module)" className="btn btn-info btn-small" ng-show="module.isSingleRow">Add Assessments...</button>
-                        <button ng-click="deleteModule(year, $index)" className="btn btn-danger btn-small"><i className="icon-trash icon-white"></i> Remove module</button>
+                        <button onClick={this.deleteModule.bind(this)} className="btn btn-danger btn-small"><i className="icon-trash icon-white"></i> Remove module</button>
                     </span>
                 </div>
             </div>
