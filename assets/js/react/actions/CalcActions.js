@@ -64,7 +64,17 @@ const CalcActions = {
                 moduleIndex,
             },
         });
-    }
+    },
+
+    expandModuleAssessments(year, moduleIndex) {
+        AppDispatcher.dispatch({
+            type: CalcConstants.EXPAND_MODULE_ASSESSMENTS,
+            payload: {
+                year,
+                moduleIndex,
+            },
+        });        
+    },
 }
 
 export default CalcActions;

@@ -19,6 +19,10 @@ class ModuleEditor extends React.Component {
         CalcActions.deleteModule(this.props.year, this.props.moduleIndex);
     }
 
+    expandAssessments() {
+        CalcActions.expandModuleAssessments(this.props.year, this.props.moduleIndex);
+    }
+
     getModuleMark() {
         // TODO: return module mark
         return 3.14;
@@ -88,7 +92,10 @@ class ModuleEditor extends React.Component {
                         </span>
                     }
                     <span className="pull-right">
-                        <button ng-click="convertToMultiple(module)" className="btn btn-info btn-small" ng-show="module.isSingleRow">Add Assessments...</button>
+                        {this.props.isSingleRow ?
+                            <button onClick={this.expandAssessments.bind(this)} className="btn btn-info btn-small" ng-show="module.isSingleRow">Add Assessments...</button>
+                            : null
+                        }
                         <button onClick={this.deleteModule.bind(this)} className="btn btn-danger btn-small"><i className="icon-trash icon-white"></i> Remove module</button>
                     </span>
                 </div>

@@ -135,6 +135,22 @@ csi.dispatchToken = AppDispatcher.register(action => {
             });
             break;
 
+        case CalcConstants.EXPAND_MODULE_ASSESSMENTS:
+            csi.state = update(csi.state, {
+                years: {
+                    [action.payload.year-2]: {
+                        modules: {
+                            [action.payload.moduleIndex]: {
+                                isSingleRow: {
+                                    $set: false,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+            break;
+
         default:
             console.log('u wot?', action.type);
     }
