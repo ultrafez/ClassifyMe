@@ -25,7 +25,9 @@
     "react": "^0.14.3",
     "react-addons-update": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-transform-catch-errors": "^1.0.1",
     "react-transform-hmr": "^1.0.1",
+    "redbox-react": "^1.2.0",
     "webpack": "^1.12.8",
     "webpack-dev-server": "^1.14.0"
   }
