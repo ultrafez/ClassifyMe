@@ -14,6 +14,7 @@ module.exports = function () {
     });
 
     gulp.task('webpack:build', function (callback) {
+        process.env.BABEL_ENV = 'production';
         var buildConfig = Object.create(webpackConfig);
 
         buildConfig.plugins = buildConfig.plugins.concat(
@@ -56,15 +57,19 @@ module.exports = function () {
         var dsConfig = Object.create(webpackConfig);
         dsConfig.devtool = 'inline-source-map';
         dsConfig.debug = true;
+        dsConfig.entry.unshift('webpack/hot/dev-server');
         dsConfig.entry.unshift('webpack-dev-server/client?http://localhost:8080');
+        dsConfig.plugins.unshift(new webpack.HotModuleReplacementPlugin());
+        dsConfig.output.publicPath = '/public/js/';
 
         var myWebpack = webpack(dsConfig);
 
         new WebpackDevServer(myWebpack, {
-            publicPath: '/public' + dsConfig.output.publicPath,
+            publicPath: dsConfig.output.publicPath,
             stats: {
                 colors: true,
             },
+            hot: true,
         }).listen(8080, 'localhost', function(err) {
             if (err) throw new gutil.PluginError('webpack-dev-server', err);
             gutil.log('[webpack-dev-server]', 'listening');
