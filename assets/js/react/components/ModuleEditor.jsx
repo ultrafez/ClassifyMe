@@ -1,4 +1,5 @@
 import CalcActions from '../actions/CalcActions';
+import InputPatternRestrictor from './InputPatternRestrictor.jsx';
 import classNames from 'classnames';
 
 class ModuleEditor extends React.Component {
@@ -27,18 +28,17 @@ class ModuleEditor extends React.Component {
                         placeholder="Module name/code (optional)"
                         />
                     <div className="input-append" title="Credits must be multiples of 5">
-                        <input
-                            type="number"
-                            min="0"
-                            max="120"
-                            step="5"
-                            required
-                            onChange={this.updateCredits.bind(this)}
-                            pattern="^[0-9]*[05]$"
-                            // TODO: enforce the regex
-                            className="input-supermini"
-                            value={this.props.credits}
-                            />
+                        <InputPatternRestrictor onChange={this.updateCredits.bind(this)} value={this.props.credits}>
+                            <input
+                                type="number"
+                                min="0"
+                                max="120"
+                                step="5"
+                                required
+                                pattern="^[0-9]*[05]$"
+                                className="input-supermini"
+                                />
+                        </InputPatternRestrictor>
                         <span className="add-on">credits</span>
                     </div>
                     <span className="input-append module-mark" ng-show="module.isSingleRow" ng-class="{'failed-module': module.assessments[0].mark < 40}" data-title="Failed module" data-trigger="manual" data-placement="top" data-content="Failing a module means it's down to the examiners to decide whether you should graduate with or without honours.">
